@@ -15,6 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/strava/_authenticate', 'StravaController@authenticate');
+Route::get('/strava/_get_activities', 'StravaController@activities');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

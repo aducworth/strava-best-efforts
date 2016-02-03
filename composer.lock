@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "49255f5d0e56380550f0f376046fc9d5",
-    "content-hash": "0aee6428304e9f39b8c45c144e20c204",
+    "hash": "fa8ea60b0572750e4cd56ca01e0b0f81",
+    "content-hash": "ae5828618b9be3ff16b8561b28691d2d",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -562,6 +562,45 @@
                 "parser"
             ],
             "time": "2014-09-09 13:34:57"
+        },
+        {
+            "name": "iamstuartwilson/strava",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iamstuartwilson/strava.git",
+                "reference": "acce75c62e6de6af3f3a98c87cce0a0b6c587f1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iamstuartwilson/strava/zipball/acce75c62e6de6af3f3a98c87cce0a0b6c587f1e",
+                "reference": "acce75c62e6de6af3f3a98c87cce0a0b6c587f1e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Iamstuartwilson": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stuart Wilson",
+                    "email": "bonjour@iamstuartwilson.com"
+                }
+            ],
+            "description": "PHP implementation of the Strava V3 API",
+            "time": "2016-01-26 12:13:34"
         },
         {
             "name": "jakub-onderka/php-console-color",
