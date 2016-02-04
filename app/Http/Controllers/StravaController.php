@@ -15,7 +15,9 @@ class StravaController extends Controller
 	var $clientSecret;
 	var $api;
 	
-	public function __construct() {
+	public function __construct(Request $request = null) {
+		
+		$this->middleware('auth');
 		
 		$this->clientId = getenv('STRAVA_CLIENT_ID');
 		$this->clientSecret = getenv('STRAVA_CLIENT_SECRET');
@@ -25,8 +27,25 @@ class StravaController extends Controller
 		    $this->clientSecret
 		);
 		
-		$token = $this->api->setAccessToken('42fec3b2d5840a3400ac8412f000c15bc8deb697');
+		if( $request->user()->strava_token ) {
+			$this->api->setAccessToken( $request->user()->strava_token );
+		}	
 		
+	}
+	
+	/**
+	 * Display link to connect to Strava.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function connect(Request $request)
+	{
+	    $url = $this->api->authenticationUrl('http://localhost/strava/authenticate', 'auto', 'write', 'mystate');
+	
+	    return view('strava.connect', [
+	        'url' => $url,
+	    ]);
 	}
 	
 	/**
@@ -37,8 +56,17 @@ class StravaController extends Controller
 	 */
 	public function authenticate(Request $request)
 	{
-		$activities = $this->api->authenticationUrl('http://local.strava/strava/_authenticate', 'auto', 'write', 'mystate');
-		return response()->json($activities);
+		$code = $request->input('code');
+		
+		echo( $code );
+		
+		if( $code ) {
+			$token = $this->api->tokenExchange($code);
+			print_r( $token );
+			$request->user()->strava_token = $token->access_token;
+			echo( $request->user()->save() );
+		}
+		
 	}
 	
     /**
@@ -49,7 +77,52 @@ class StravaController extends Controller
 	 */
 	public function activities(Request $request)
 	{
-		$activities = $this->api->get('athlete/activities', ['per_page' => 200,'page' => 1]);
-		return response()->json($activities);
+		$page 			= 1;
+		$activity_count = 200;
+		
+		while( $activity_count == 200 && $page < 10 ) {
+		
+			$activities = $this->api->get('athlete/activities', ['per_page' => 200,'page' => $page]);
+			
+			foreach( $activities as $activity ) {
+				
+				//print_r( $activity );
+				
+				$data = array(
+								'strava_id'				=> $activity->id,
+								'athlete' 				=> $activity->athlete->id,
+								'name'					=> $activity->name,
+								'distance'				=> $activity->distance,
+								'moving_time'			=> $activity->moving_time,
+								'elapsed_time'			=> $activity->elapsed_time,
+								'start_date'			=> $activity->start_date,
+								'start_date_local'		=> $activity->start_date_local,
+								'location_city'			=> $activity->location_city,
+								'location_state'		=> $activity->location_state,
+								'location_country'		=> $activity->location_country,
+								'gear_id'				=> $activity->gear_id,
+								'average_speed'			=> $activity->average_speed,
+								'max_speed'				=> $activity->max_speed,
+								'type'					=> $activity->type
+								
+				);
+				
+				try {
+					$request->user()->activities()->create($data);
+				} catch(Exception $e) {
+					echo 'Caught exception: ',  $e->getMessage(), "<br>";
+				}
+				
+		    
+		    }
+		    
+		    $activity_count = count( $activities );
+			$page++;
+			
+			echo( '<h2>Activity Count: ' . $activity_count . ' Page: ' . $page . '</h2>' );
+		    
+		}
+		exit;
 	}
+	
 }
