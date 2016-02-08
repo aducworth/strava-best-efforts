@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 /* User Authentication */
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
+
 
 
 
@@ -35,11 +35,16 @@ Route::group(['middleware' => ['web']], function () {
     /* User Authentication */
 	Route::get('auth/login', 'Auth\AuthController@getLogin');
 	Route::post('auth/login', 'Auth\AuthController@postLogin');
+	Route::get('auth/logout', 'Auth\AuthController@logout');
 	
 	Route::get('auth/register', 'Auth\AuthController@getRegister');
 	Route::post('auth/register', 'Auth\AuthController@postRegister');
 	
 	Route::get('/strava/authenticate', 'StravaController@authenticate');
 	Route::get('/strava/connect', 'StravaController@connect');
-	Route::get('/strava/_get_activities', 'StravaController@activities');
+	Route::get('/strava/_get_activities', 'StravaController@importActivities');
+	Route::get('/strava/_get_best_efforts', 'StravaController@importBestEfforts');
+	Route::get('/strava/activities', 'StravaController@activities');
+	Route::get('/strava/import', 'StravaController@import');
+	Route::get('/strava/stats', 'StravaController@stats');
 });
