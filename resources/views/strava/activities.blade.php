@@ -4,11 +4,12 @@
 
     <!-- Current Activities -->
     @if (count($activities) > 0)
+    	<div class="page-header">
+		  <h1>Activities <small>{{ count($activities) }}</small></h1>
+		</div>
         <div class="panel panel-default">
-            <div class="panel-heading">
-                Activities ({{ count($activities) }})
-            </div>
-
+	        
+           
             <div class="panel-body">
                 <table class="table table-striped activity-table">
 
@@ -44,4 +45,5 @@
             </div>
         </div>
     @endif
+	
 @endsection

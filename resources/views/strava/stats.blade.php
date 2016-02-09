@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+
+	<div class="page-header">
+	  <h1>Stats</h1>
+	</div>
+		
 	<div class="container">
 		<div class="col-sm-offset-2 col-sm-8">
 			<div class="panel panel-default">
@@ -13,7 +18,7 @@
 					@include('common.errors')
 
 									
-					<div id='stat-chart' style='min-width: 400px;
+					<div id='stat-chart' style='min-width: 600px;
     height: 400px;
     margin: 0 auto;'></div>				
 									
