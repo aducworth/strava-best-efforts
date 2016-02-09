@@ -11,12 +11,13 @@
 |
 */
 
+/*
 Route::get('/', function () {
     return view('welcome');
 });
+*/
 
 /* User Authentication */
-
 
 
 
@@ -40,11 +41,13 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('auth/register', 'Auth\AuthController@getRegister');
 	Route::post('auth/register', 'Auth\AuthController@postRegister');
 	
-	Route::get('/strava/authenticate', 'StravaController@authenticate');
-	Route::get('/strava/connect', 'StravaController@connect');
 	Route::get('/strava/_get_activities', 'StravaController@importActivities');
 	Route::get('/strava/_get_best_efforts', 'StravaController@importBestEfforts');
 	Route::get('/strava/activities', 'StravaController@activities');
 	Route::get('/strava/import', 'StravaController@import');
 	Route::get('/strava/stats', 'StravaController@stats');
+	Route::get('/strava/authenticate', 'StravaController@authenticate');
+	Route::get('/strava/connect', 'StravaController@connect');
+	Route::get('/strava/profile', 'StravaController@profile');
+	Route::get('/', 'StravaController@connect');
 });

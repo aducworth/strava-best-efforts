@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Auth;
+use App\User;
 use App\Activity;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -11,14 +13,13 @@ use Iamstuartwilson;
 
 class StravaController extends Controller
 {
-	
 	var $clientId;
 	var $clientSecret;
 	var $api;
 	
 	public function __construct(Request $request = null) {
 		
-		$this->middleware('auth');
+		$this->middleware('auth', ['except' => array('connect', 'authenticate')]);
 		
 		$this->clientId = getenv('STRAVA_CLIENT_ID');
 		$this->clientSecret = getenv('STRAVA_CLIENT_SECRET');
@@ -50,6 +51,18 @@ class StravaController extends Controller
 	}
 	
 	/**
+	 * Display profile page
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function profile(Request $request)
+	{
+	    return view('strava.profile');
+	}
+
+	
+	/**
 	 * authenticate
 	 *
 	 * @param  Request  $request
@@ -62,21 +75,28 @@ class StravaController extends Controller
 		if( $code ) {
 			$token = $this->api->tokenExchange($code);
 			
-			// fill in data
-			$request->user()->strava_token = $token->access_token;
-			$request->user()->name = ( $token->athlete->firstname . " " . $token->athlete->lastname );
-			$request->user()->profile_medium = $token->athlete->profile_medium;
-			//$request->user()->profile_large = $token->athlete->profile_large;
-			$request->user()->city = $token->athlete->city;
-			$request->user()->state = $token->athlete->state;
-			$request->user()->country = $token->athlete->country;
-			$request->user()->sex = $token->athlete->sex;
-			$request->user()->premium = $token->athlete->premium;
-			$request->user()->date_preference = $token->athlete->date_preference;
-			$request->user()->measurement_preference = $token->athlete->measurement_preference;
-			$request->user()->email = $token->athlete->email;
+			$user = User::firstOrCreate(['strava_token' => $token->access_token]);
 			
-			echo( $request->user()->save() );
+			// fill in data
+			$user->strava_token = $token->access_token;
+			$user->name = ( $token->athlete->firstname . " " . $token->athlete->lastname );
+			$user->profile_medium = $token->athlete->profile_medium;
+			$user->city = $token->athlete->city;
+			$user->state = $token->athlete->state;
+			$user->country = $token->athlete->country;
+			$user->sex = $token->athlete->sex;
+			$user->premium = $token->athlete->premium;
+			$user->date_preference = $token->athlete->date_preference;
+			$user->measurement_preference = $token->athlete->measurement_preference;
+			$user->email = $token->athlete->email;
+			$user->password = bcrypt('stravapassword');
+			
+			$user->save();
+			
+			if (Auth::attempt(['email' => $token->athlete->email, 'password' => 'stravapassword']))
+	        {
+	            return redirect()->intended('strava/import');
+	        }
 		}
 		
 	}
