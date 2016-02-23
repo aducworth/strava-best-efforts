@@ -30,7 +30,7 @@ class CreateActivitiesTable extends Migration
             $table->integer('average_speed');
             $table->integer('max_speed');
             $table->integer('calories');
-            $table->text('details');
+            $table->integer('details')->default(0);
             $table->timestamps();
         });
     }
