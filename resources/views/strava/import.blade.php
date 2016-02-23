@@ -2,11 +2,11 @@
 
 @section('content')
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Import from Strava
-            </div>
-
+    <div class="page-header">
+	  <h1>Importing Activities from Strava</h1>
+	</div>
+	<div class="panel">
+           
             <div class="panel-body">
 	            
 	            <div id='importing-activities' class="alert" role="alert">Importing activities...</div>
