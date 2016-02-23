@@ -43,7 +43,7 @@ class StravaController extends Controller
 	 */
 	public function connect(Request $request)
 	{
-	    $url = $this->api->authenticationUrl('http://localhost/strava/authenticate', 'auto', 'write', 'mystate');
+	    $url = $this->api->authenticationUrl('http://' . $_SERVER['SERVER_NAME'] . '/strava/authenticate', 'auto', 'write', 'mystate');
 	
 	    return view('strava.connect', [
 	        'url' => $url,
