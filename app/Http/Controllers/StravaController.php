@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use App\Activity;
+use App\BestEffort;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Iamstuartwilson;
@@ -99,6 +100,40 @@ class StravaController extends Controller
 	        }
 		}
 		
+	}
+	
+	/**
+	 * Display a list of all of the user's best efforts.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function running(Request $request)
+	{
+		
+		$distances = BestEffort::orderBy('distance','asc')->groupBy('name')->lists('name','name');
+		
+	    $query = $request->user()->activities()->join('best_efforts as be', 'be.activity_id', '=', 'activities.id')
+    ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local')->orderBy('be.moving_time', 'asc');
+    	
+    	if( $request->distance ) {
+	    	$query->where('be.name',$request->distance);
+    	}
+    	
+    	if( $request->from_date ) {
+			$query->where('be.start_date_local','>=',date('Y-m-d',strtotime($request->from_date)));
+		}
+		
+		if( $request->to_date ) {
+			$query->where('be.start_date_local','<=',date('Y-m-d',strtotime('+1 day',strtotime($request->to_date))));
+		}
+    	
+    	$efforts = $query->get();
+	
+	    return view('strava.running', [
+	        'efforts' => $efforts,
+	        'distances' => $distances
+	    ]);
 	}
 	
 	/**

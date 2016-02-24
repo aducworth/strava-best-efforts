@@ -49,5 +49,6 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/strava/authenticate', 'StravaController@authenticate');
 	Route::get('/strava/connect', 'StravaController@connect');
 	Route::get('/strava/profile', 'StravaController@profile');
+	Route::get('/strava/running', 'StravaController@running');
 	Route::get('/', 'StravaController@connect');
 });
