@@ -6,12 +6,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>Strava Best Efforts</title>
+	
+	<script type="text/javascript" src="{{ asset("assets/bower_components/jquery/dist/jquery.min.js") }}"></script>
+	<script type="text/javascript" src="{{ asset("assets/bower_components/moment/min/moment.min.js") }}"></script>
+	<script type="text/javascript" src="{{ asset("assets/bower_components/bootstrap/dist/js/bootstrap.min.js") }}"></script>
+	<script type="text/javascript" src="{{ asset("assets/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
+	<link rel="stylesheet" href="{{ asset("assets/bower_components/bootstrap/dist/css/bootstrap.min.css") }}" />
+	<link href="{{ asset("assets/css/bootstrap.css") }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ asset("assets/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}" />
+	<script src="https://code.highcharts.com/highcharts.js"></script>
 
     <link href="{{ asset("assets/css/bootstrap.css") }}" rel="stylesheet">
     <link href="{{ asset("assets/css/app.css") }}" rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
 
 </head>
 
@@ -34,7 +40,7 @@
 					<ul class="nav navbar-nav">
 						@if (!Auth::guest())
 							<li><a href="/strava/activities"><i class="fa fa-btn fa-heart"></i>Activities</a></li>
-							<li><a href="/strava/stats"><i class="fa fa-btn fa-heart"></i>Stats</a></li>
+							<li><a href="/strava/running"><i class="fa fa-btn fa-heart"></i>Running</a></li>
 						@endif
 					</ul>
 
