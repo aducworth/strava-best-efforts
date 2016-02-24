@@ -104,7 +104,7 @@
 	    
 	@else
 	
-	<div class="alert alert-info" role="alert">Please choose a distance to view best efforts.</div>
+	<div class="alert" role="alert">Please choose a distance to view best efforts.</div>
 	
 	@endif
 	

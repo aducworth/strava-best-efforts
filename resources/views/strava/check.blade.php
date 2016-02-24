@@ -7,17 +7,16 @@ $(document).ready(function(){
 	}).done(function(data) {
 	  if( data.result == true ) {
 		  $('#checkImport').modal();
-/*
-		  $('#checkImport').on('hidden.bs.modal', function () {
-			  location.reload();
-			});
-*/
 		  var source = new EventSource("/strava/import	");
 		    source.addEventListener("message", function(e)
 		    {
 			    var result = JSON.parse( e.data );
           
 				$('.progress-bar').html(result.refresh + '%').attr('style','width: ' + result.refresh +'%;');  
+				
+				if( result.refresh == 100 ) {
+					$( ".modal-body" ).append( '<div class="alert alert-success" role="alert">Finished importing!</div>' );
+				}
 				
 		    }, false);
 	   }
