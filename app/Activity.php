@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
@@ -23,5 +24,49 @@ class Activity extends Model
     public function bestEfforts()
     {
         return $this->hasMany(BestEffort::class);
+    }
+    
+    /**
+     * Format distances in readable format.
+     */
+    public static function formatDistance($distance) {
+	    
+	    if( Auth::user()->measurement_preference == 'feet' ) {
+		    
+		    return number_format( $distance * 0.000621371, 2 ) . ' mi';
+		    
+	    }
+	    
+	    if( $distance < 1000 ) {
+		    
+		    return $distance . 'm';
+		    
+	    }
+	    
+	    return number_format( $distance / 1000, 1 ) . 'km'; 
+	    
+    }
+    
+    /**
+     * Format times in readable format.
+     */
+    public static function formatTime($time) {
+	    
+	    $minutes = floor( $time / 60 );
+	    $seconds = ( $time % 60 );
+	    $hours = floor( $minutes / 60 );
+	    $minutes = ( $minutes % 60 );
+	    
+	    return ($hours?($hours.':'):'') . ($minutes?(sprintf("%02d", $minutes).':'):'00:') . ($seconds?(sprintf("%02d", $seconds).''):'00'); 
+	    
+    }
+    
+    /**
+     * Format dates in readable format.
+     */
+    public static function formatDate($date) {
+	    
+	    return date('m/d/Y g:ia', strtotime( $date )); 
+	    
     }
 }

@@ -114,7 +114,7 @@ class StravaController extends Controller
 		$distances = BestEffort::orderBy('distance','asc')->groupBy('name')->lists('name','name');
 		
 	    $query = $request->user()->activities()->join('best_efforts as be', 'be.activity_id', '=', 'activities.id')
-    ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local')->orderBy('be.moving_time', 'asc');
+    ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local, activities.name, activities.distance, activities.strava_id')->orderBy('be.moving_time', 'asc');
     	
     	if( $request->distance ) {
 	    	$query->where('be.name',$request->distance);

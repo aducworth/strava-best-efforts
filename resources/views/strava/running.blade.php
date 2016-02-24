@@ -60,8 +60,10 @@
 	                    <thead>
 	                        <th>&nbsp;</th>
 	                        <th>Time</th>
+	                        <th>Activity</th>
+	                        <th>Distance</th>
 	                        <th>Date</th>
-	                        <th>&nbsp;</th>
+	                        
 	                    </thead>
 	                    
 	                    <? $i = 1; ?>
@@ -72,15 +74,18 @@
 	                            <tr>
 		                            <td>{{ $i }}.</td>
 	                                <td class="table-text">
-	                                    <div>{{ gmdate('H:i:s', $effort->moving_time) }}</div>
+	                                    <div>{{ App\Activity::formatTime( $effort->moving_time ) }}</div>
 	                                </td>
 	                                <td class="table-text">
-	                                    <div>{{ date('m/d/Y g:ia', strtotime( $effort->start_date_local )) }}</div>
+	                                    <div><a href='https://www.strava.com/activities/{{ $effort->strava_id }}' target='_blank'>{{ $effort->name }}</a></div>
+	                                </td>
+	                                <td class="table-text">
+	                                    <div>{{ App\Activity::formatDistance( $effort->distance ) }}</div>
+	                                </td>
+	                                <td class="table-text">
+	                                    <div>{{ App\Activity::formatDate( $effort->start_date_local ) }}</div>
 	                                </td>
 	
-	                                <td>
-	                                    <!-- TODO: Delete Button -->
-	                                </td>
 	                            </tr>
 	                            
 	                            <? $i++; ?>

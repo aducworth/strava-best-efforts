@@ -17,6 +17,8 @@
                     <thead>
                         <th>Activity</th>
                         <th>Type</th>
+                        <th>Distance</th>
+                        <th>Time</th>
                         <th>Date</th>
                         <th>&nbsp;</th>
                     </thead>
@@ -32,7 +34,13 @@
                                     <div>{{ $activity->type }}</div>
                                 </td>
                                 <td class="table-text">
-                                    <div>{{ $activity->start_date_local }}</div>
+                                    <div>{{ App\Activity::formatDistance( $activity->distance ) }}</div>
+                                </td>
+                                <td class="table-text">
+                                    <div>{{ App\Activity::formatTime( $activity->moving_time ) }}</div>
+                                </td>
+                                <td class="table-text">
+                                    <div>{{ App\Activity::formatDate( $activity->start_date_local ) }}</div>
                                 </td>
 
                                 <td>

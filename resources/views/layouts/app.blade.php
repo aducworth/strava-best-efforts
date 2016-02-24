@@ -51,8 +51,14 @@
 							<li><a href="/auth/login"><i class="fa fa-btn fa-sign-in"></i>Login</a></li>
 -->
 						@else
-							<li><a href="/strava/profile"><i class="fa fa-btn fa-user"></i>{{ Auth::user()->name }}</a></li>
-							<li><a href="/auth/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+							<li role="presentation" class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+									{{ Auth::user()->name }} <span class="caret"></span>
+    							</a>
+    							<ul class="dropdown-menu">
+	    							<li><a href="/auth/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+    							</ul>
+							</li>	
 						@endif
 					</ul>
 				</div>
