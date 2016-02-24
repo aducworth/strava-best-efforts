@@ -108,4 +108,6 @@
 	
 	@endif
 	
+	@include('strava.check')
+	
 @endsection

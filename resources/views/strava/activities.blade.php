@@ -53,5 +53,7 @@
             </div>
         </div>
     @endif
+    
+    @include('strava.check')
 	
 @endsection

@@ -11,6 +11,7 @@ use App\BestEffort;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Iamstuartwilson;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class StravaController extends Controller
 {
@@ -96,7 +97,7 @@ class StravaController extends Controller
 			
 			if (Auth::attempt(['email' => $token->athlete->email, 'password' => 'stravapassword']))
 	        {
-	            return redirect()->intended('strava/import');
+	            return redirect()->intended('strava/running');
 	        }
 		}
 		
@@ -159,8 +160,33 @@ class StravaController extends Controller
 	 */
 	public function import(Request $request)
 	{	
-	    return view('strava.import');
+		$this->importActivities();
+		
+		return $this->importBestEfforts();
+
 	}
+	
+	/**
+	 * Check to see if we imported today.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function checkImport(Request $request)
+	{	
+	    $user = Auth::user();
+		
+		$import_date = $user->import_date;
+		$today = date('Y-m-d');
+		
+		if( strtotime( $import_date ) < strtotime( $today ) ) {
+			return response()->json(['result' => true]);
+		}
+		
+		return response()->json(['result' => false]);
+	}
+	
+	
 	
 	/**
 	 * Show stats from best efforts.
@@ -247,7 +273,7 @@ class StravaController extends Controller
 	 * @param  Request  $request
 	 * @return Response
 	 */
-	public function importActivities(Request $request)
+	public function importActivities()
 	{
 		$page 			= (Auth::user()->import_page)?Auth::user()->import_page:1;
 		$activity_count = 200;
@@ -261,7 +287,7 @@ class StravaController extends Controller
 								
 				try {
 					
-					$activity_update = $request->user()->activities()->firstOrCreate(['strava_id' => $activity->id]);
+					$activity_update = Auth::user()->activities()->firstOrCreate(['strava_id' => $activity->id]);
 					
 					// check to see if this is new
 					if( !$activity_update->name ) {
@@ -300,7 +326,7 @@ class StravaController extends Controller
 		// save the date and last import page
 		$user = Auth::user();
 		
-		$user->import_page = $page;
+		$user->import_page = ($page-1);
 		$user->import_date = date('Y-m-d');
 		
 		$user->save();
@@ -315,48 +341,76 @@ class StravaController extends Controller
 	 * @param  Request  $request
 	 * @return Response
 	 */
-	public function importBestEfforts(Request $request)
+	public function importBestEfforts()
 	{
-		$runs = $request->user()->activities()->where('details',0)->where('type','Run')->get();
-		$imported = 0;
-	
-		foreach( $runs as $run ) {
-			
-			$strava_run = $this->api->get('activities/' . $run->strava_id);
 		
-			if( count( $strava_run->best_efforts ) > 0 ) {
-								
-				foreach( $strava_run->best_efforts as $be ) {
+		
+		$response = new StreamedResponse(function () {
+			
+			$runs = Auth::user()->activities()->where('details',0)->where('type','Run')->get();
+			$imported = 0;
+			$runs_imported = 0;
+
+			if( count($runs) ) {
+				
+				ob_start();
+	            foreach( $runs as $run ) {
+				
+					$strava_run = $this->api->get('activities/' . $run->strava_id);
+				
+					if( count( $strava_run->best_efforts ) > 0 ) {
+										
+						foreach( $strava_run->best_efforts as $be ) {
+							
+							$best_effort = $run->bestEfforts()->firstOrCreate(['strava_id' => $be->id]);		
+							
+							// check to see if this is new
+							if( !$best_effort->name ) {
+								$imported++;
+							}			
+							
+							$best_effort->strava_id				= $be->id;
+							$best_effort->athlete_id 			= $be->athlete->id;
+							$best_effort->name					= $be->name;
+							$best_effort->distance				= $be->distance;
+							$best_effort->moving_time			= $be->moving_time;
+							$best_effort->elapsed_time			= $be->elapsed_time;
+							$best_effort->start_date			= $be->start_date;
+							$best_effort->start_date_local		= $be->start_date_local;
+							$best_effort->pr_rank				= $be->pr_rank;
+							
+							$best_effort->save();
+							
+						}
+						
+					}
 					
-					$best_effort = $run->bestEfforts()->firstOrCreate(['strava_id' => $be->id]);		
+					$runs_imported++;
 					
-					// check to see if this is new
-					if( !$best_effort->name ) {
-						$imported++;
-					}			
+					$run->details = 1;
+					$run->save();
 					
-					$best_effort->strava_id				= $be->id;
-					$best_effort->athlete_id 			= $be->athlete->id;
-					$best_effort->name					= $be->name;
-					$best_effort->distance				= $be->distance;
-					$best_effort->moving_time			= $be->moving_time;
-					$best_effort->elapsed_time			= $be->elapsed_time;
-					$best_effort->start_date			= $be->start_date;
-					$best_effort->start_date_local		= $be->start_date_local;
-					$best_effort->pr_rank				= $be->pr_rank;
+					$percentage = number_format( ($runs_imported/count($runs)) * 100 );
 					
-					$best_effort->save();
-					
+					echo ( 'data: ' . json_encode(['refresh' => $percentage]) . "\n\n");
+					ob_flush();
+		            flush();
+				
 				}
 				
+				
+			} else {
+				ob_start();
+				echo ( 'data: ' . json_encode(['refresh' => 100]) . "\n\n");
+				ob_flush();
+		        flush();
 			}
-			
-			$run->details = 1;
-			$run->save();
-			
-		}
-		
-		return response()->json(['imported' => $imported]);
+            
+
+        });
+
+        $response->headers->set('Content-Type', 'text/event-stream');
+        return $response;
 	
 	}
 	
