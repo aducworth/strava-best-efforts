@@ -249,7 +249,7 @@ class StravaController extends Controller
 	 */
 	public function importActivities(Request $request)
 	{
-		$page 			= 1;
+		$page 			= (Auth::user()->import_page)?Auth::user()->import_page:1;
 		$activity_count = 200;
 		$imported = 0;
 		
@@ -296,6 +296,14 @@ class StravaController extends Controller
 			$page++;
 			
 		}
+		
+		// save the date and last import page
+		$user = Auth::user();
+		
+		$user->import_page = $page;
+		$user->import_date = date('Y-m-d');
+		
+		$user->save();
 		
 		return response()->json(['imported' => $imported]);
 		
