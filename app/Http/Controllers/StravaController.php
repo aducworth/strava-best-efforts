@@ -12,6 +12,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Iamstuartwilson;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Mail;
 
 class StravaController extends Controller
 {
@@ -78,6 +79,19 @@ class StravaController extends Controller
 			$token = $this->api->tokenExchange($code);
 			
 			$user = User::firstOrCreate(['strava_token' => $token->access_token]);
+			
+			if( !$user->email ) {
+				
+				Mail::send('emails.newuser', ['name' => ( $token->athlete->firstname . " " . $token->athlete->lastname )], function($message)
+				{
+					$message->from('admin@stravabestefforts.com', 'Strava BE');
+				    $message->to(env('MANDRILL_EMAIL'), 'Austin Ducworth')->subject('New Strava BE User');
+				});
+				
+				echo( 'trying to send to ' . env('MANDRILL_EMAIL')  );
+				exit;
+			
+			}
 			
 			// fill in data
 			$user->strava_token = $token->access_token;
