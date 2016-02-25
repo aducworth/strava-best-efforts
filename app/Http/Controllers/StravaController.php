@@ -171,9 +171,18 @@ class StravaController extends Controller
 	 */
 	public function import(Request $request)
 	{	
-		$this->importActivities();
+		if( $this->importActivities() ) {
+			
+			return $this->importBestEfforts();
+			
+		}
 		
-		return $this->importBestEfforts();
+		$response = new StreamedResponse(function () {
+			echo ( 'data: ' . json_encode(['message' => 'Rate Limit Exceeded']) . "\n\n");
+        });
+
+        $response->headers->set('Content-Type', 'text/event-stream');
+        return $response;
 
 	}
 	
@@ -294,6 +303,12 @@ class StravaController extends Controller
 		
 			$activities = $this->api->get('athlete/activities', ['per_page' => 200,'page' => $page]);
 			
+			if(isset($activities->errors) && count($activities->errors)) {
+				
+				return false;
+				
+			}
+			
 			foreach( $activities as $activity ) {
 								
 				try {
@@ -342,7 +357,7 @@ class StravaController extends Controller
 		
 		$user->save();
 		
-		return response()->json(['imported' => $imported]);
+		return true;
 		
 	}
 	
@@ -368,6 +383,15 @@ class StravaController extends Controller
 	            foreach( $runs as $run ) {
 				
 					$strava_run = $this->api->get('activities/' . $run->strava_id);
+					
+					if(isset($strava_run->errors) && count($strava_run->errors)) {
+				
+						echo ( 'data: ' . json_encode(['message' => $strava_run->message]) . "\n\n");
+						ob_flush();
+			            flush();
+			            break;
+						
+					}
 				
 					if( count( $strava_run->best_efforts ) > 0 ) {
 										

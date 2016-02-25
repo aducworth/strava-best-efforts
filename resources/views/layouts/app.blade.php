@@ -56,6 +56,7 @@
 									{{ Auth::user()->name }} <span class="caret"></span>
     							</a>
     							<ul class="dropdown-menu">
+	    							<li><a id='manualImport' href="#"><i class="fa fa-btn"></i>Import from Strava</a></li>
 	    							<li><a href="/auth/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
     							</ul>
 							</li>	
@@ -68,6 +69,73 @@
 	<div class="container">
 		@yield('content')
 	</div>
+	
+	<script>
+				
+		$(document).ready(function(){
+		
+			$('#manualImport').click(function(e){
+				e.preventDefault();
+				stravaImport();
+			});
+			
+		});
+		
+		function stravaImport() {
+			
+			  $('#importSuccess').hide();
+			  $('#importFailure').hide();
+			  $('.progress-bar').html('0%').attr('style','width: 0%;');
+			   
+			  $('#importModal').modal();
+			  var source = new EventSource("/strava/import	");
+			    source.addEventListener("message", function(e)
+			    {
+				    var result = JSON.parse( e.data );
+	          
+					if( result.refresh != null ) {
+						$('.progress-bar').html(result.refresh + '%').attr('style','width: ' + result.refresh +'%;');  
+					
+						if( result.refresh == 100 ) {
+							$('#importSuccess').show();
+						}
+					}
+					
+					if( result.message != null ) {
+						
+						$('#importFailure').html('Errors: ' + result.message + '. Please try again in 15 minutes.').show();
+						
+					}
+					
+					
+			    }, false);
+		}
+	
+	</script>
+	
+	<div id='importModal' class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Importing from Strava</h4>
+	      </div>
+	      <div class="modal-body">
+		    <p>Importing all of your activities and best efforts. This will only take a second.</p>
+	        <div class="progress">
+			  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+			    0%
+			  </div>
+			</div>
+			<div id='importSuccess' class="alert alert-success" style='display: none;' role="alert">Finished importing!</div>
+			<div id='importFailure' class="alert alert-danger" style='display: none;' role="alert"></div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
 	
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
