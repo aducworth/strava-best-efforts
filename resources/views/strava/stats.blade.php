@@ -16,11 +16,20 @@
 				<div class="panel-body">
 					<!-- Display Validation Errors -->
 					@include('common.errors')
+					
+					<div class="row">
+					  <div class="col-md-4">.col-md-4</div>
+					  <div class="col-md-8">
+						  <div id='stat-chart' style='min-width: 600px;
+    height: 400px;
+    margin: 0 auto;'></div>	
+					  </div>
+					</div>
 
 									
-					<div id='stat-chart' style='min-width: 600px;
-    height: 400px;
-    margin: 0 auto;'></div>				
+<!--
+					
+-->			
 									
 				</div>
 			</div>

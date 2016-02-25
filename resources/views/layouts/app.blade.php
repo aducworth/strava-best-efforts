@@ -11,18 +11,17 @@
 	<script type="text/javascript" src="{{ asset("assets/bower_components/moment/min/moment.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/bootstrap/dist/js/bootstrap.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
-	<link rel="stylesheet" href="{{ asset("assets/bower_components/bootstrap/dist/css/bootstrap.min.css") }}" />
-	<link href="{{ asset("assets/css/bootstrap.css") }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset("assets/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}" />
 	<script src="https://code.highcharts.com/highcharts.js"></script>
-
-    <link href="{{ asset("assets/css/bootstrap.css") }}" rel="stylesheet">
     <link href="{{ asset("assets/css/app.css") }}" rel="stylesheet">
+    
+    <style>
+	    body { padding-top: 70px; }
+	</style>
 
 </head>
 
 <body>
-<!-- 	<div class="container"> -->
 		<nav class="navbar navbar-inverse navbar-fixed-top">
 			<div class="container">
 				<div class="navbar-header">
@@ -45,12 +44,7 @@
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
-						@if (Auth::guest())
-<!--
-							<li><a href="/auth/register"><i class="fa fa-btn fa-heart"></i>Register</a></li>
-							<li><a href="/auth/login"><i class="fa fa-btn fa-sign-in"></i>Login</a></li>
--->
-						@else
+						@if (!Auth::guest())
 							<li role="presentation" class="dropdown">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 									{{ Auth::user()->name }} <span class="caret"></span>
@@ -65,7 +59,6 @@
 				</div>
 			</div>
 		</nav>
-<!-- 	</div> -->
 	<div class="container">
 		@yield('content')
 	</div>
