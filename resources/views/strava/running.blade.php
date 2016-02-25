@@ -74,7 +74,7 @@
 	                            <tr>
 		                            <td>{{ $i }}.</td>
 	                                <td class="table-text">
-	                                    <div>{{ App\Activity::formatTime( $effort->moving_time ) }}</div>
+	                                    <div>{{ App\Activity::formatTime( $effort->elapsed_time ) }}</div>
 	                                </td>
 	                                <td class="table-text">
 	                                    <div><a href='https://www.strava.com/activities/{{ $effort->strava_id }}' target='_blank'>{{ $effort->name }}</a></div>
