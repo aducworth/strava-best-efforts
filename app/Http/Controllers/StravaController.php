@@ -87,9 +87,6 @@ class StravaController extends Controller
 					$message->from('admin@stravabestefforts.com', 'Strava BE');
 				    $message->to(env('MANDRILL_EMAIL'), 'Austin Ducworth')->subject('New Strava BE User');
 				});
-				
-				echo( 'trying to send to ' . env('MANDRILL_EMAIL')  );
-				exit;
 			
 			}
 			
