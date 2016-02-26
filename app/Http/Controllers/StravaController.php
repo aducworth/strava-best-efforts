@@ -295,9 +295,10 @@ class StravaController extends Controller
 	 */
 	public function importActivities()
 	{
-		$page 			= (Auth::user()->import_page)?Auth::user()->import_page:1;
-		$activity_count = 200;
-		$imported = 0;
+		$page 				= 1;
+		$activity_count 	= 200;
+		$imported 			= 0;
+		$finished			= false;
 		
 		while( $activity_count == 200 && $page < 10 ) {
 		
@@ -318,6 +319,10 @@ class StravaController extends Controller
 					// check to see if this is new
 					if( !$activity_update->name ) {
 						$imported++;
+					} else {
+						// adding break once we get to activities already imported
+						$finished = true;
+						break;
 					}
 							 
 					$activity_update->strava_id				= $activity->id;
@@ -342,6 +347,11 @@ class StravaController extends Controller
 					echo 'Caught exception: ',  $e->getMessage(), "<br>";
 				}				
 		    
+		    }
+		    
+		    // break out and finish import if we find previously imported entries
+		    if( $finished ) {
+			    break;
 		    }
 		    
 		    $activity_count = count( $activities );
