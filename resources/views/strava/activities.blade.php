@@ -26,8 +26,15 @@
                     <!-- Table Body -->
                     <tbody>
                         @foreach ($activities as $activity)
-                            <tr>
-                                <td class="table-text">
+                            <? 
+	                        	$today = false;
+	                        	
+	                        	if( date('Y-m-d',strtotime($activity->start_date_local)) == date('Y-m-d') ) {
+		                        	$today = true;
+	                        	}
+	                        ?>
+                            <tr <? if($today): ?>class='today'<? endif; ?>>                                
+		                        <td class="table-text">
                                     <div>{{ $activity->name }}</div>
                                 </td>
                                 <td class="table-text">

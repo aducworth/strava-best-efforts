@@ -16,6 +16,10 @@
   font-weight: 700;
   text-transform: uppercase; }
 
+.today {
+  font-weight: bold;
+  font-size: larger; }
+
 .has-warning .help-block,
 .has-warning .control-label,
 .has-warning .radio,

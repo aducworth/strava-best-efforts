@@ -71,7 +71,14 @@
 	                    <!-- Table Body -->
 	                    <tbody>
 	                        @foreach ($efforts as $effort)
-	                            <tr>
+	                        	<? 
+		                        	$today = false;
+		                        	
+		                        	if( date('Y-m-d',strtotime($effort->start_date_local)) == date('Y-m-d') ) {
+			                        	$today = true;
+		                        	}
+		                        ?>
+	                            <tr <? if($today): ?>class='today'<? endif; ?>>
 		                            <td>{{ $i }}.</td>
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatTime( $effort->elapsed_time ) }}</div>
