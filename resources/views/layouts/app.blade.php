@@ -51,6 +51,7 @@
     							</a>
     							<ul class="dropdown-menu">
 	    							<li><a id='manualImport' href="#"><i class="fa fa-btn"></i>Import from Strava</a></li>
+	    							<li><a id='supportRequest' href="#"><i class="fa fa-btn"></i>Support</a></li>
 	    							<li><a href="/auth/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
     							</ul>
 							</li>	
@@ -70,6 +71,42 @@
 			$('#manualImport').click(function(e){
 				e.preventDefault();
 				stravaImport();
+			});
+			
+			$('#supportRequest').click(function(e){
+				e.preventDefault();
+				
+				$('#supportSuccess').hide();
+				$('#supportFailure').hide();
+				
+				//$('#supportModal').modal();
+				
+				$.ajax({
+				  url: "/_supportform"
+				}).done(function(data) {
+				  $('#supportForm').html( data );
+				  $('#supportModal').modal();
+				});
+			});
+			
+			$('#supportForm').submit(function(e){
+				e.preventDefault();
+				
+				var postData = $(this).serialize();
+				
+				$.ajax({
+				  url: "/_support",
+				  data: postData,
+				  type: "POST"
+				}).done(function(data) {
+					
+				  if( data.result ) {
+					  $('#supportSuccess').show();
+				  } else {
+					  $('#supportFailure').text(data.errors).show();
+				  }
+				});
+				
 			});
 			
 		});
@@ -125,6 +162,25 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
+	<div id='supportModal' class="modal fade" tabindex="-1" role="dialog">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Send Support Request</h4>
+	      </div>
+	      <div class="modal-body">
+		    <div id='supportSuccess' class="alert alert-success" style='display: none;' role="alert">We have received your request, and we'll get back to you soon!</div>
+			<div id='supportFailure' class="alert alert-danger" style='display: none;' role="alert"></div>
+			
+		    <form id="supportForm" action="/_support" method='post'>
+			    
+			</form>
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->

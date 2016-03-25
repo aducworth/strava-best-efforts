@@ -41,6 +41,9 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('auth/register', 'Auth\AuthController@getRegister');
 	Route::post('auth/register', 'Auth\AuthController@postRegister');
 	
+	Route::post('/_support', 'StravaController@support');
+	Route::get('/_supportform', 'StravaController@supportForm');
+	
 	Route::get('/strava/_check_import', 'StravaController@checkImport');
 	Route::get('/strava/_get_activities', 'StravaController@importActivities');
 	Route::get('/strava/_get_best_efforts', 'StravaController@importBestEfforts');

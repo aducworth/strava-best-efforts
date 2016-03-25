@@ -115,6 +115,41 @@ class StravaController extends Controller
 	}
 	
 	/**
+	 * Send a support request.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function support(Request $request)
+	{
+		if( $request->email && $request->message ) {
+			
+			Mail::send('emails.support', ['email' => $request->email, 'supportMessage' => $request->message ], function($supportEmail)
+			{
+				$supportEmail->from('admin@stravabestefforts.com', 'Strava BE');
+			    $supportEmail->to(env('MANDRILL_EMAIL'), 'Austin Ducworth')->subject('Strava BE Support Request');
+			});
+			
+			return response()->json(['result' => true]);
+			
+		}
+		
+		return response()->json(['result' => false, 'errors' => 'Please include a valid email and message.']);
+	}
+	
+	/**
+	 * Show the support form.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function supportForm(Request $request)
+	{
+		return view('strava.supportForm');
+		
+	}
+	
+	/**
 	 * Display a list of all of the user's best efforts.
 	 *
 	 * @param  Request  $request
