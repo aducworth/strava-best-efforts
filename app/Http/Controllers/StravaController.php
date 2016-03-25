@@ -163,19 +163,29 @@ class StravaController extends Controller
 	    $query = $request->user()->activities()->join('best_efforts as be', 'be.activity_id', '=', 'activities.id')
     ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local, activities.name, activities.distance, activities.strava_id')->orderBy('be.elapsed_time', 'asc');
     	
+    	// make sure a distance is selected
     	if( $request->distance ) {
-	    	$query->where('be.name',$request->distance);
+	    	
+	    	if( $request->distance ) {
+		    	$query->where('be.name',$request->distance);
+	    	}
+	    	
+	    	if( $request->from_date ) {
+				$query->where('be.start_date_local','>=',date('Y-m-d',strtotime($request->from_date)));
+			}
+			
+			if( $request->to_date ) {
+				$query->where('be.start_date_local','<=',date('Y-m-d',strtotime('+1 day',strtotime($request->to_date))));
+			}
+	    	
+	    	$efforts = $query->get();
+	    	
+    	} else {
+	    	
+	    	$efforts = array();
+	    	
     	}
     	
-    	if( $request->from_date ) {
-			$query->where('be.start_date_local','>=',date('Y-m-d',strtotime($request->from_date)));
-		}
-		
-		if( $request->to_date ) {
-			$query->where('be.start_date_local','<=',date('Y-m-d',strtotime('+1 day',strtotime($request->to_date))));
-		}
-    	
-    	$efforts = $query->get();
 	
 	    return view('strava.running', [
 	        'efforts' => $efforts,

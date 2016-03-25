@@ -44,7 +44,7 @@
 	
 	</div>
 	
-	@if (isset($_GET['distance']))
+	@if (isset($_GET['distance']) && $_GET['distance'])
 			
 	    @if (count($efforts) > 0)
 	    	<div class="page-header">
