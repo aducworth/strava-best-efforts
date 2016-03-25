@@ -43,7 +43,7 @@ class Activity extends Model
 		    
 	    }
 	    
-	    return number_format( $distance / 1000, 1 ) . 'km'; 
+	    return number_format( $distance / 1000, 1 ) . ' km'; 
 	    
     }
     
@@ -69,4 +69,28 @@ class Activity extends Model
 	    return date('m/d/Y g:ia', strtotime( $date )); 
 	    
     }
+    
+    /**
+     * Calculate pace.
+     */
+    public static function calculatePace($meters,$seconds) {
+	    
+	    // if doing pace / mile
+	    if( Auth::user()->measurement_preference == 'feet' ) {
+		    
+		    $mile 				= 1609;
+		    $mile_distance		= $meters / $mile;
+		    $pace				= $seconds / $mile_distance;
+		    
+		    return ( static::formatTime($pace) . ' / mi' );
+		    
+	    }
+	    
+	    $kilometer 			= 1000;
+	    $km_distance		= $meters / $kilometer;
+	    $pace				= $seconds / $km_distance;
+	    
+	    return ( static::formatTime($pace) . ' / km' );
+	    
+    } 
 }

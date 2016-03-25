@@ -56,12 +56,12 @@
 	            <div class="panel-body">
 	                <table class="table table-striped activity-table">
 	
-	                    <!-- Table Headings -->
 	                    <thead>
 	                        <th>&nbsp;</th>
 	                        <th>Time</th>
+	                        <th>Pace</th>
 	                        <th>Activity</th>
-	                        <th>Distance</th>
+	                        <th>Total Run</th>
 	                        <th>Date</th>
 	                        
 	                    </thead>
@@ -82,6 +82,9 @@
 		                            <td>{{ $i }}.</td>
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatTime( $effort->elapsed_time ) }}</div>
+	                                </td>
+	                                <td class="table-text">
+	                                    <div>{{ App\Activity::calculatePace( $effort->effort_distance, $effort->elapsed_time ) }}</div>
 	                                </td>
 	                                <td class="table-text">
 	                                    <div><a href='https://www.strava.com/activities/{{ $effort->strava_id }}' target='_blank'>{{ $effort->name }}</a></div>
