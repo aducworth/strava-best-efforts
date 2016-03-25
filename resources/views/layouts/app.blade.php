@@ -92,7 +92,7 @@
 			$('#supportForm').submit(function(e){
 				e.preventDefault();
 				
-				var postData = $(this).serialize();
+				var postData = $(this).serialize() + '&url=' + $('#url').val();
 				
 				$.ajax({
 				  url: "/_support",
@@ -177,6 +177,8 @@
 	      <div class="modal-body">
 		    <div id='supportSuccess' class="alert alert-success" style='display: none;' role="alert">We have received your request, and we'll get back to you soon!</div>
 			<div id='supportFailure' class="alert alert-danger" style='display: none;' role="alert"></div>
+			
+			<input type="hidden" id="url" value="<?=$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] ?>">
 			
 		    <form id="supportForm" action="/_support" method='post'>
 			    

@@ -122,9 +122,9 @@ class StravaController extends Controller
 	 */
 	public function support(Request $request)
 	{
-		if( $request->email && $request->message ) {
+		if( $request->message ) {
 			
-			Mail::send('emails.support', ['email' => $request->email, 'supportMessage' => $request->message ], function($supportEmail)
+			Mail::send('emails.support', ['email' => Auth::user()->email, 'supportMessage' => $request->message, 'url' => $request->url], function($supportEmail)
 			{
 				$supportEmail->from('admin@stravabestefforts.com', 'Strava BE');
 			    $supportEmail->to(env('MANDRILL_EMAIL'), 'Austin Ducworth')->subject('Strava BE Support Request');
@@ -134,7 +134,7 @@ class StravaController extends Controller
 			
 		}
 		
-		return response()->json(['result' => false, 'errors' => 'Please include a valid email and message.']);
+		return response()->json(['result' => false, 'errors' => 'Please include a message.']);
 	}
 	
 	/**
