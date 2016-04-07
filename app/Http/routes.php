@@ -34,8 +34,9 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web']], function () {
     /* User Authentication */
-	Route::get('auth/login', 'Auth\AuthController@getLogin');
-	Route::post('auth/login', 'Auth\AuthController@postLogin');
+	//Route::get('auth/login', 'Auth\AuthController@getLogin');
+	//Route::post('auth/login', 'Auth\AuthController@postLogin');
+	Route::get('auth/login', 'StravaController@connect');
 	Route::get('auth/logout', 'Auth\AuthController@logout');
 	
 	Route::get('auth/register', 'Auth\AuthController@getRegister');
