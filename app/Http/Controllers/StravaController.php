@@ -8,6 +8,7 @@ use Auth;
 use App\User;
 use App\Activity;
 use App\BestEffort;
+use App\Split;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Iamstuartwilson;
@@ -194,6 +195,45 @@ class StravaController extends Controller
 	}
 	
 	/**
+	 * Analyze splits.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function splits(Request $request)
+	{
+				
+	    $query = $request->user()->activities()->where('type','Run')->orderBy('start_date_local', 'desc');
+	    
+	    $split_count = $request->split_count?$request->split_count:1;
+    	
+    	// make sure a distance is selected
+    	if( $request->from_date || $request->to_date ) {
+	    		    	
+	    	if( $request->from_date ) {
+				$query->where('start_date_local','>=',date('Y-m-d',strtotime($request->from_date)));
+			}
+			
+			if( $request->to_date ) {
+				$query->where('start_date_local','<=',date('Y-m-d',strtotime('+1 day',strtotime($request->to_date))));
+			}
+	    	
+	    	$runs = $query->get();
+	    	
+    	} else {
+	    	
+	    	$runs = array();
+	    	
+    	}
+    	
+	
+	    return view('strava.splits', [
+	        'runs' => $runs,
+	        'split_count' => $split_count
+	    ]);
+	}
+	
+	/**
 	 * Display a list of all of the user's activities.
 	 *
 	 * @param  Request  $request
@@ -215,10 +255,11 @@ class StravaController extends Controller
 	 * @return Response
 	 */
 	public function import(Request $request)
-	{	
+	{
+				
 		if( $this->importActivities() ) {
 			
-			return $this->importBestEfforts();
+			return $this->importDetails();
 			
 		}
 		
@@ -356,7 +397,7 @@ class StravaController extends Controller
 			}
 			
 			foreach( $activities as $activity ) {
-								
+				
 				try {
 					
 					$activity_update = Auth::user()->activities()->firstOrCreate(['strava_id' => $activity->id]);
@@ -417,12 +458,12 @@ class StravaController extends Controller
 	}
 	
 	/**
-	 * Import best efforts
+	 * Import details
 	 *
 	 * @param  Request  $request
 	 * @return Response
 	 */
-	public function importBestEfforts()
+	public function importDetails()
 	{
 		
 		
@@ -470,6 +511,52 @@ class StravaController extends Controller
 							$best_effort->pr_rank				= $be->pr_rank;
 							
 							$best_effort->save();
+							
+						}
+						
+					}
+					
+					if( count( $strava_run->splits_standard ) > 0 ) {
+										
+						foreach( $strava_run->splits_standard as $ss ) {
+							
+							$split = $run->splits()->firstOrCreate(['activity_id' => $strava_run->id,'type' => 'standard','split'=>$ss->split]);		
+							
+							// check to see if this is new
+							if( !$split->distance ) {
+								$imported++;
+							}			
+							
+							$split->split				= $ss->split;
+							$split->distance			= $ss->distance;
+							$split->moving_time			= $ss->moving_time;
+							$split->elapsed_time		= $ss->elapsed_time;
+							$split->elevation_difference	= $ss->elevation_difference;
+							
+							$split->save();
+							
+						}
+						
+					}
+					
+					if( count( $strava_run->splits_metric ) > 0 ) {
+										
+						foreach( $strava_run->splits_metric as $ss ) {
+							
+							$split = $run->splits()->firstOrCreate(['activity_id' => $strava_run->id,'type' => 'metric','split'=>$ss->split]);
+							
+							// check to see if this is new
+							if( !$split->distance ) {
+								$imported++;
+							}			
+							
+							$split->split				= $ss->split;
+							$split->distance			= $ss->distance;
+							$split->moving_time			= $ss->moving_time;
+							$split->elapsed_time		= $ss->elapsed_time;
+							$split->elevation_difference	= $ss->elevation_difference;
+							
+							$split->save();
 							
 						}
 						

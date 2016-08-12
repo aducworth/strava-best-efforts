@@ -26,6 +26,14 @@ class Activity extends Model
         return $this->hasMany(BestEffort::class);
     }
     
+     /**
+     * Get all of the splits for the activity.
+     */
+    public function splits()
+    {
+        return $this->hasMany(Split::class);
+    }
+    
     /**
      * Format distances in readable format.
      */
