@@ -7,7 +7,7 @@
 		<form class="form-inline">
 		  <div class="form-group">
 			  <div class='col-sm-6'>
-				<select class='form-control' name='split_count'>
+				<select class='form-control' name='split_count' id='split_count'>
 					<? for( $i=1; $i < 31; $i++ ): ?>
 						<option value='<?=$i ?>' <?=($split_count==$i)?"selected":'' ?>><?=$i ?> Splits</option>
 					<? endfor; ?>
@@ -55,6 +55,8 @@
 	    @if (count($runs) > 0)
 	    	<div class="page-header">
 			  <h1>Analyze <?=(Auth::user()->measurement_preference == 'feet')?'Mile':'Kilometer' ?> Splits <small>{{ count($runs) }}</small></h1>
+			  <input type='hidden' id='unit' value='<?=(Auth::user()->measurement_preference == 'feet')?'mi':'km' ?>'>
+			  
 			</div>
 	        <div class="panel panel-default">
 		        
@@ -115,7 +117,7 @@
 	                                <? foreach( $run_splits as $ind_split ): ?>
 	                                					
 										<td class="table-text">
-		                                    <div>
+		                                    <div class='<?=($these_splits+1) ?>-splits' distance='{{ $ind_split->distance }}'>
 			                                    
 			                                    	<? //$ind_split->split ?>
 			                                    	{{ App\Activity::formatTime( $ind_split->elapsed_time ) }}
@@ -147,6 +149,57 @@
 	                </table>
 	            </div>
 	        </div>
+	        
+	        <script>
+	        	var split_count 	= parseInt( $('#split_count').val() );
+	        	var unit 			= $('#unit').val();
+	        	var full_distance   = ( unit == 'mi' )?1609:1000;
+	        	var variance		= 10;
+	        	
+	        	console.log('Split Count: ' + split_count);
+	        	console.log('Unit: ' + unit );
+	        	
+	        	for(var i=1;i < (split_count+1);i++) {
+		        	
+		        	console.log('Checking split ' + i);
+		        	
+		        	var lowest_number = 100000;
+		        	var lowest = null;
+		        	
+		        	
+		        	$('.'+i+'-splits').each(function() {
+			        	
+			        	var distance = parseInt($(this).attr('distance'));
+			        	
+			        	console.log($(this).text());
+			        	console.log('Distance: ' + distance);
+			        	
+			        	var this_time = toSeconds($(this).text());
+			        	
+			        	if( this_time < lowest_number && ( distance >= ( full_distance - variance ) && distance <= ( full_distance + variance ) ) ) {
+				        	lowest = $(this);
+				        	lowest_number = this_time;
+			        	}
+			        	
+		        	});
+		        	
+		        	if( lowest != null ) {
+			        	
+			        	lowest.css('color','#FC4C04');
+		        	}
+		        	//lowest.css('color','#FC4C04');
+		        	
+	        	}
+	        	
+	        	function toSeconds(time) {
+		        	
+		        	var parts = time.split(":");
+		        	
+		        	return parseInt( parts[0] * 60 ) + parseInt( parts[1] );
+		        	
+	        	}
+	        	
+	        </script>
 	    @else
 	    
 	    	<div class="alert alert-info" role="alert">No best efforts are currently in the database.</div>
