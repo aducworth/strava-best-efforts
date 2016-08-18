@@ -292,6 +292,42 @@ class StravaController extends Controller
 		return response()->json(['result' => false]);
 	}
 	
+	/**
+	 * Show information regarding yearly running goal.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function goals(Request $request)
+	{
+		
+		if( isset($request->goal) ) {
+			
+			$request->user()->yearly_running_goal = $request->goal;
+			$request->user()->save();
+			
+		}
+		
+		$last_year 		= date('Y-12-31',strtotime('-1 year'));
+		$miles_to_date 	= 0;
+		$time_to_date	= 0;
+		
+		$week_of_year = date('W');
+		$weeks_left		= ( 52 - $week_of_year );
+		
+		$runs = Activity::where('user_id', $request->user()->id)->where('start_date_local','>',$last_year)->where('type','Run')->orderBy('start_date_local', 'asc')->get();
+		
+		foreach( $runs as $run ) {
+			
+			$miles_to_date += $run->distance;
+			$time_to_date += $run->moving_time;
+			
+		}
+				
+		return view('strava.goals',[ 'yearly_running_goal' => $request->user()->yearly_running_goal, 'week_of_year' => $week_of_year, 'miles_to_date' => Activity::formatDistance(  $miles_to_date ), 'time_to_date' => Activity::formatTime( $time_to_date ), 'weekly_mileage' => Activity::formatDistance( $miles_to_date / $week_of_year ), 'weeks_left' => $weeks_left, 'miles_to_go' => Activity::formatDistance( ( $request->user()->yearly_running_goal * 1609 ) - $miles_to_date ), 'weekly_goal' => Activity::formatDistance( ( ( $request->user()->yearly_running_goal * 1609 ) - $miles_to_date ) / $weeks_left ) ]);
+		
+	}
+	
 	
 	
 	/**

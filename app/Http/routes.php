@@ -56,5 +56,6 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/strava/profile', 'StravaController@profile');
 	Route::get('/strava/running', 'StravaController@running');
 	Route::get('/strava/splits', 'StravaController@splits');
+	Route::get('/strava/goals', 'StravaController@goals');
 	Route::get('/', 'StravaController@connect');
 });

@@ -47,6 +47,7 @@
 								<ul class="dropdown-menu">
 	    							<li><a href="/strava/running"><i class="fa fa-btn"></i>Best Efforts</a></li>
 	    							<li><a href="/strava/splits"><i class="fa fa-btn"></i>Analyze Splits</a></li>
+	    							<li><a href="/strava/goals"><i class="fa fa-btn"></i>Yearly Goal</a></li>
 								</ul>
 							</li>
 						@endif
