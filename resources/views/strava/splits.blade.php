@@ -61,7 +61,7 @@
 	        <div class="panel panel-default">
 		        
 	           
-	            <div class="panel-body">
+	            <div class="panel-body table-responsive">
 	                <table class="table table-striped activity-table">
 	
 	                    <thead>
@@ -112,7 +112,7 @@
 	                                
 	                                <? $these_splits = 0; ?>
 	                                
-	                                <? $run_splits = $run->splits()->where('type','standard')->orderBy('split','asc')->get(); ?>
+	                                <? $run_splits = $run->splits()->where('type',(Auth::user()->measurement_preference == 'feet')?'standard':'metric')->orderBy('split','asc')->get(); ?>
 	                                					
 	                                <? foreach( $run_splits as $ind_split ): ?>
 	                                					
