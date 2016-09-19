@@ -4,7 +4,7 @@
 
     <div class="container">
 	    
-	    <h1>Annual Mileage Goal</h1>
+	    <h1>Annual <?=(Auth::user()->measurement_preference == 'feet')?'Mileage':'Kilometer' ?> Goal</h1>
 			
 		<form class="form-inline">
 		  <div class="form-group">

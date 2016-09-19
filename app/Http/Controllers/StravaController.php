@@ -308,6 +308,19 @@ class StravaController extends Controller
 			
 		}
 		
+		$goal = $request->user()->yearly_running_goal;
+		
+		// do the standard metric goal conversion
+		if( Auth::user()->measurement_preference == 'feet' ) {
+			
+			$goal = $goal * 1609; // convert to miles
+			
+		} else {
+			
+			$goal = $goal * 1000;
+			
+		}
+		
 		$last_year 		= date('Y-12-31',strtotime('-1 year'));
 		$miles_to_date 	= 0;
 		$time_to_date	= 0;
@@ -323,8 +336,21 @@ class StravaController extends Controller
 			$time_to_date += $run->moving_time;
 			
 		}
-				
-		return view('strava.goals',[ 'yearly_running_goal' => $request->user()->yearly_running_goal, 'week_of_year' => $week_of_year, 'miles_to_date' => Activity::formatDistance(  $miles_to_date ), 'time_to_date' => Activity::formatTime( $time_to_date ), 'weekly_mileage' => Activity::formatDistance( $miles_to_date / $week_of_year ), 'weeks_left' => $weeks_left, 'miles_to_go' => Activity::formatDistance( ( $request->user()->yearly_running_goal * 1609 ) - $miles_to_date ), 'weekly_goal' => Activity::formatDistance( ( ( $request->user()->yearly_running_goal * 1609 ) - $miles_to_date ) / $weeks_left ) ]);
+		
+		// check to see if the goal has been met
+		if( $miles_to_date >= $goal ) {
+			
+			$miles_to_go = Activity::formatDistance( 0 );
+			$weekly_goal = Activity::formatDistance( 0 );
+			
+		} else {
+			
+			$miles_to_go = Activity::formatDistance( $goal - $miles_to_date );
+			$weekly_goal = Activity::formatDistance( ( $goal - $miles_to_date ) / $weeks_left );
+			
+		}
+		
+		return view('strava.goals',[ 'yearly_running_goal' => $request->user()->yearly_running_goal, 'week_of_year' => $week_of_year, 'miles_to_date' => Activity::formatDistance(  $miles_to_date ), 'time_to_date' => Activity::formatTime( $time_to_date ), 'weekly_mileage' => Activity::formatDistance( $miles_to_date / $week_of_year ), 'weeks_left' => $weeks_left, 'miles_to_go' => $miles_to_go, 'weekly_goal' => $weekly_goal ]);
 		
 	}
 	
