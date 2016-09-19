@@ -7,6 +7,8 @@
 
 	<title>View All Best Efforts From Runs on Strava - Strava Best Efforts</title>
 	
+	<meta name="Description" content="View All Best Efforts From Runs on Strava, Analyze Splits, and Set Yearly Running Goals">
+	
 	<script type="text/javascript" src="{{ asset("assets/bower_components/jquery/dist/jquery.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/moment/min/moment.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/bootstrap/dist/js/bootstrap.min.js") }}"></script>
