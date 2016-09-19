@@ -79,7 +79,8 @@ class StravaController extends Controller
 		if( $code ) {
 			$token = $this->api->tokenExchange($code);
 			
-			$user = User::firstOrCreate(['strava_token' => $token->access_token]);
+			// changing to use email instead of access token since access token apparently changes
+			$user = User::firstOrCreate(['email' => $token->athlete->email]);
 			
 			if( !$user->email ) {
 				
@@ -104,7 +105,6 @@ class StravaController extends Controller
 			$user->measurement_preference = $token->athlete->measurement_preference;
 			$user->email = $token->athlete->email;
 			$user->password = bcrypt('stravapassword');
-			
 			$user->save();
 			
 			if (Auth::attempt(['email' => $token->athlete->email, 'password' => 'stravapassword']))
