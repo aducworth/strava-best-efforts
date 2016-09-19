@@ -82,7 +82,7 @@ class StravaController extends Controller
 			// changing to use email instead of access token since access token apparently changes
 			$user = User::firstOrCreate(['email' => $token->athlete->email]);
 			
-			if( !$user->email ) {
+			if( !$user->strava_token ) {
 				
 				Mail::send('emails.newuser', ['name' => ( $token->athlete->firstname . " " . $token->athlete->lastname )], function($message)
 				{
