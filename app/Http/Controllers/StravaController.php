@@ -275,7 +275,7 @@ class StravaController extends Controller
 	public function activities(Request $request)
 	{
 		
-		$types = Activity::orderBy('type','asc')->groupBy('type')->lists('type','type');
+		$types = Activity::where('user_id', $request->user()->id)->orderBy('type','asc')->groupBy('type')->lists('type','type');
 		
 	    $query = Activity::where('user_id', $request->user()->id)->orderBy('start_date_local', 'desc');
 	    
