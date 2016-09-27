@@ -183,7 +183,7 @@ class StravaController extends Controller
 	    	
     	} else {
 	    	
-	    	$efforts = array();
+	    	$efforts = [];
 	    	
     	}
     	
@@ -234,6 +234,39 @@ class StravaController extends Controller
 	}
 	
 	/**
+	 * Take action on multiple activities.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function multi(Request $request)
+	{
+		
+		if( $request->multi_edit ) {
+			
+			foreach( $request->multi_edit as $activity_id ) {
+				
+				$activity = Activity::where('strava_id', $activity_id)->first();
+				
+				if( $activity ) {
+					
+					$activity->bestEfforts()->delete();
+					
+					$activity->splits()->delete();
+					
+					$activity->delete();
+									
+				}
+				
+			}
+			
+		}
+		
+		return redirect()->intended('strava/activities?type='.$request->type.'&from_date='.$request->from_date.'&to_date='.$request->to_date);
+		
+	}
+	
+	/**
 	 * Display a list of all of the user's activities.
 	 *
 	 * @param  Request  $request
@@ -241,10 +274,27 @@ class StravaController extends Controller
 	 */
 	public function activities(Request $request)
 	{
-	    $activities = Activity::where('user_id', $request->user()->id)->orderBy('start_date_local', 'desc')->get();
+		
+		$types = Activity::orderBy('type','asc')->groupBy('type')->lists('type','type');
+		
+	    $query = Activity::where('user_id', $request->user()->id)->orderBy('start_date_local', 'desc');
+	    
+    	if( $request->type ) {
+	    	$query->where('type',$request->type);
+    	}
+    	
+    	if( $request->from_date ) {
+			$query->where('start_date_local','>=',date('Y-m-d',strtotime($request->from_date)));
+		}
+		
+		if( $request->to_date ) {
+			$query->where('start_date_local','<=',date('Y-m-d',strtotime('+1 day',strtotime($request->to_date))));
+		}
+	    	
+	    	$activities = $query->get();
 	
 	    return view('strava.activities', [
-	        'activities' => $activities,
+	        'activities' => $activities, 'types' => $types
 	    ]);
 	}
 	
@@ -367,13 +417,13 @@ class StravaController extends Controller
 		
 		$activities = Activity::where('user_id', $request->user()->id)->where('start_date_local','>','2015-01-01')->orderBy('start_date_local', 'asc')->get();
 		
-		$monthly_totals = array();
+		$monthly_totals = [];
 		
-		$month_array = array();
-		$distance_array = array();
+		$month_array = [];
+		$distance_array = [];
 		
 		$month_string = "";
-		$distance_strings = array();
+		$distance_strings = [];
 		
 		//$distances = array( '400m', '1/2 mile', '1 mile', '2 mile', '5k', '10k', '15k', '10 mile', '20k' );
 		$distances = array( '400m', '1/2 mile' );
@@ -381,10 +431,10 @@ class StravaController extends Controller
 		foreach( $activities as $activity ) {
 			
 			if( !isset( $monthly_totals[date('m/Y',strtotime($activity->start_date_local))] ) ) {
-				$monthly_totals[date('m/Y',strtotime($activity->start_date_local))] = array();
+				$monthly_totals[date('m/Y',strtotime($activity->start_date_local))] = [];
 			}
 			if( !isset( $monthly_totals[date('m/Y',strtotime($activity->start_date_local))][$activity->type] ) ) {
-				$monthly_totals[date('m/Y',strtotime($activity->start_date_local))][$activity->type] = array( 'distance' => 0, 'time' => 0 );
+				$monthly_totals[date('m/Y',strtotime($activity->start_date_local))][$activity->type] = [ 'distance' => 0, 'time' => 0 ];
 			}
 			
 			$monthly_totals[date('m/Y',strtotime($activity->start_date_local))][$activity->type]['distance'] += ( $activity->distance * 0.000621371 );
@@ -416,7 +466,7 @@ class StravaController extends Controller
 			foreach( $distances as $distance ) {
 				
 				if( !isset($distance_array[$distance]) ) {
-					$distance_array[$distance] = array();
+					$distance_array[$distance] = [];
 				}
 				
 				if( isset($totals['Run'][$distance]) ) {
