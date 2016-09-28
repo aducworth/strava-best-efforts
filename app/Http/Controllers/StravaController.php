@@ -601,7 +601,7 @@ class StravaController extends Controller
 						
 					}
 				
-					if( count( $strava_run->best_efforts ) > 0 ) {
+					if( isset( $strava_run->best_efforts ) && count( $strava_run->best_efforts ) > 0 ) {
 										
 						foreach( $strava_run->best_efforts as $be ) {
 							
@@ -628,7 +628,7 @@ class StravaController extends Controller
 						
 					}
 					
-					if( count( $strava_run->splits_standard ) > 0 ) {
+					if( isset( $strava_run->splits_standard ) && count( $strava_run->splits_standard ) > 0 ) {
 										
 						foreach( $strava_run->splits_standard as $ss ) {
 							
