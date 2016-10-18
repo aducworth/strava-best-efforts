@@ -651,7 +651,7 @@ class StravaController extends Controller
 						
 					}
 					
-					if( count( $strava_run->splits_metric ) > 0 ) {
+					if( isset( $strava_run->splits_metric ) && count( $strava_run->splits_metric ) > 0 ) {
 										
 						foreach( $strava_run->splits_metric as $ss ) {
 							
