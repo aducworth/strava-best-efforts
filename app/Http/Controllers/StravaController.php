@@ -77,39 +77,44 @@ class StravaController extends Controller
 		$code = $request->input('code');
 		
 		if( $code ) {
+			
 			$token = $this->api->tokenExchange($code);
 			
-			// changing to use email instead of access token since access token apparently changes
-			$user = User::firstOrCreate(['email' => $token->athlete->email]);
+			if( isset( $token->athlete ) ) {
 			
-			if( !$user->strava_token ) {
+				// changing to use email instead of access token since access token apparently changes
+				$user = User::firstOrCreate(['email' => $token->athlete->email]);
 				
-				Mail::send('emails.newuser', ['name' => ( $token->athlete->firstname . " " . $token->athlete->lastname )], function($message)
-				{
-					$message->from('admin@stravabestefforts.com', 'Strava BE');
-				    $message->to(env('MANDRILL_EMAIL'), 'Austin Ducworth')->subject('New Strava BE User');
-				});
-			
-			}
-			
-			// fill in data
-			$user->strava_token = $token->access_token;
-			$user->name = ( $token->athlete->firstname . " " . $token->athlete->lastname );
-			$user->profile_medium = $token->athlete->profile_medium;
-			$user->city = $token->athlete->city;
-			$user->state = $token->athlete->state;
-			$user->country = $token->athlete->country;
-			$user->sex = $token->athlete->sex;
-			$user->premium = $token->athlete->premium;
-			$user->date_preference = $token->athlete->date_preference;
-			$user->measurement_preference = $token->athlete->measurement_preference;
-			$user->email = $token->athlete->email;
-			$user->password = bcrypt('stravapassword');
-			$user->save();
-			
-			if (Auth::attempt(['email' => $token->athlete->email, 'password' => 'stravapassword']))
-	        {
-	            return redirect()->intended('strava/running');
+				if( !$user->strava_token ) {
+					
+					Mail::send('emails.newuser', ['name' => ( $token->athlete->firstname . " " . $token->athlete->lastname )], function($message)
+					{
+						$message->from('admin@stravabestefforts.com', 'Strava BE');
+					    $message->to(env('MANDRILL_EMAIL'), 'Austin Ducworth')->subject('New Strava BE User');
+					});
+				
+				}
+				
+				// fill in data
+				$user->strava_token = $token->access_token;
+				$user->name = ( $token->athlete->firstname . " " . $token->athlete->lastname );
+				$user->profile_medium = $token->athlete->profile_medium;
+				$user->city = $token->athlete->city;
+				$user->state = $token->athlete->state;
+				$user->country = $token->athlete->country;
+				$user->sex = $token->athlete->sex;
+				$user->premium = $token->athlete->premium;
+				$user->date_preference = $token->athlete->date_preference;
+				$user->measurement_preference = $token->athlete->measurement_preference;
+				$user->email = $token->athlete->email;
+				$user->password = bcrypt('stravapassword');
+				$user->save();
+				
+				if (Auth::attempt(['email' => $token->athlete->email, 'password' => 'stravapassword']))
+		        {
+		            return redirect()->intended('strava/running');
+		        }
+	        
 	        }
 		}
 		
