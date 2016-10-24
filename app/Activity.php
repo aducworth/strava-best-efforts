@@ -88,7 +88,7 @@ class Activity extends Model
 		    
 		    $mile 				= 1609;
 		    $mile_distance		= $meters / $mile;
-		    $pace				= $seconds / $mile_distance;
+		    $pace				= ( $mile_distance > 0 )?( $seconds / $mile_distance ):0;
 		    
 		    return ( static::formatTime($pace) . ' / mi' );
 		    
@@ -96,7 +96,7 @@ class Activity extends Model
 	    
 	    $kilometer 			= 1000;
 	    $km_distance		= $meters / $kilometer;
-	    $pace				= $seconds / $km_distance;
+	    $pace				= ( $km_distance > 0 )?( $seconds / $km_distance ):0;
 	    
 	    return ( static::formatTime($pace) . ' / km' );
 	    
