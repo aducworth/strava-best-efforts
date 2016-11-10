@@ -95,7 +95,7 @@
 	                                    <div>{{ App\Activity::formatTemp( $effort->temperature ) }}</div>
 	                                </td>
 	                                <td class="table-text">
-	                                    <div>{{ $effort->humidity }}</div>
+	                                    <div>{{ $effort->humidity?$effort->humidity.'%':'' }}</div>
 	                                </td>
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatDistance( $effort->distance ) }}</div>

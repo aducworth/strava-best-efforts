@@ -116,11 +116,11 @@ class Activity extends Model
 	    // if doing pace / mile
 	    if( Auth::user()->measurement_preference == 'feet' ) {
 		    		    
-		    return round( ( $temp * (9/5) ) - 459.67 );
+		    return ( round( ( $temp * (9/5) ) - 459.67 ) . '&deg;F' );
 		    
 	    }
 	    
-	    return round( $temp - 273.15 );
+	    return ( round( $temp - 273.15 ) . '&deg;C' );
 	    
     } 
 }

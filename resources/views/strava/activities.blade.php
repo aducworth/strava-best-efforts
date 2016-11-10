@@ -108,7 +108,7 @@
 	                                    <div>{{ App\Activity::formatTemp( $activity->temperature ) }}</div>
 	                                </td>
 									<td class="table-text">
-	                                    <div>{{ $activity->humidity }}</div>
+	                                    <div>{{ $activity->humidity?$activity->humidity . '%':'' }}</div>
 	                                </td>
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatDate( $activity->start_date_local ) }}</div>
