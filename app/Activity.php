@@ -101,4 +101,26 @@ class Activity extends Model
 	    return ( static::formatTime($pace) . ' / km' );
 	    
     } 
+    
+    /**
+     * Format temp.
+     */
+    public static function formatTemp($temp) {
+	    
+	    if( $temp == '' ) {
+		    
+		    return '';
+		    
+	    }
+	    
+	    // if doing pace / mile
+	    if( Auth::user()->measurement_preference == 'feet' ) {
+		    		    
+		    return round( ( $temp * (9/5) ) - 459.67 );
+		    
+	    }
+	    
+	    return round( $temp - 273.15 );
+	    
+    } 
 }

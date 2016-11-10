@@ -10,7 +10,8 @@
         "doctrine/dbal": "v2.5.4",
         "iamstuartwilson/strava" : "~1.0",
         "laravelcollective/html": "~5.0",
-        "guzzlehttp/guzzle": "~5.0"
+        "guzzlehttp/guzzle": "~5.0",
+        "aducworth/openweather": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

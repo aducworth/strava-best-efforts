@@ -61,6 +61,8 @@
 	                        <th>Time</th>
 	                        <th>Pace</th>
 	                        <th>Activity</th>
+	                        <th>Temperature</th>
+	                        <th>Humidity</th>
 	                        <th>Total Run</th>
 	                        <th>Date</th>
 	                        
@@ -88,6 +90,12 @@
 	                                </td>
 	                                <td class="table-text">
 	                                    <div><a href='https://www.strava.com/activities/{{ $effort->strava_id }}' target='_blank'>{{ $effort->name }}</a></div>
+	                                </td>
+	                                <td class="table-text">
+	                                    <div>{{ App\Activity::formatTemp( $effort->temperature ) }}</div>
+	                                </td>
+	                                <td class="table-text">
+	                                    <div>{{ $effort->humidity }}</div>
 	                                </td>
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatDistance( $effort->distance ) }}</div>

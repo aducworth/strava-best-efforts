@@ -63,6 +63,8 @@
 	                        <th>Type</th>
 	                        <th>Distance</th>
 	                        <th>Time</th>
+	                        <th>Temperature</th>
+	                        <th>Humidity</th>
 	                        <th>Date</th>
 	                        <th>&nbsp;</th>
 	                    </thead>
@@ -101,10 +103,16 @@
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatTime( $activity->moving_time ) }}</div>
 	                                </td>
+	                                
+	                                <td class="table-text">
+	                                    <div>{{ App\Activity::formatTemp( $activity->temperature ) }}</div>
+	                                </td>
+									<td class="table-text">
+	                                    <div>{{ $activity->humidity }}</div>
+	                                </td>
 	                                <td class="table-text">
 	                                    <div>{{ App\Activity::formatDate( $activity->start_date_local ) }}</div>
 	                                </td>
-	
 	                                <td>
 	                                    <!-- TODO: Delete Button -->
 	                                </td>
@@ -118,6 +126,8 @@
 	                        <th>&nbsp;</th>
 	                        <th>{{ App\Activity::formatDistance( $total_distance ) }}</th>
 	                        <th>{{ App\Activity::formatTime( $total_time ) }}</th>
+	                        <th>&nbsp;</th>
+	                        <th>&nbsp;</th>
 	                        <th>&nbsp;</th>
 	                        <th>&nbsp;</th>
 	                    </thead>

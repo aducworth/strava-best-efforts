@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use Iamstuartwilson;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Mail;
+use Openweather;
 
 class StravaController extends Controller
 {
@@ -164,10 +165,11 @@ class StravaController extends Controller
 	public function running(Request $request)
 	{
 		
+		
 		$distances = BestEffort::orderBy('distance','asc')->groupBy('name')->lists('name','name');
 		
 	    $query = $request->user()->activities()->join('best_efforts as be', 'be.activity_id', '=', 'activities.id')
-    ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local, activities.name, activities.distance, activities.strava_id, be.distance as effort_distance')->orderBy('be.elapsed_time', 'asc');
+    ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local, activities.name, activities.distance, activities.strava_id, be.distance as effort_distance, activities.temperature, activities.humidity')->orderBy('be.elapsed_time', 'asc');
     	
     	// make sure a distance is selected
     	if( $request->distance ) {
@@ -527,7 +529,23 @@ class StravaController extends Controller
 						$finished = true;
 						break;
 					}
-							 
+					
+					$temperature = '';
+					$humidity = '';
+					
+					// only get the temp if it's imported on the same day
+					if( date( 'Y-m-d' ) == date( 'Y-m-d', strtotime( $activity->start_date ) ) ) {
+						
+						$weather = Openweather::byCoordinates(getenv('OPENWEATHER'),$activity->end_latlng[0],$activity->end_latlng[1]);
+						
+						if( isset( $weather ) && isset( $weather->main->temp ) && isset( $weather->main->humidity ) ) {
+							
+							$temperature = $weather->main->temp;
+							$humidity = $weather->main->humidity;
+						}
+						
+					} 
+												 
 					$activity_update->strava_id				= $activity->id;
 					$activity_update->athlete_id 			= $activity->athlete->id;
 					$activity_update->name					= $activity->name;
@@ -539,6 +557,13 @@ class StravaController extends Controller
 					$activity_update->location_city			= $activity->location_city;
 					$activity_update->location_state		= $activity->location_state;
 					$activity_update->location_country		= $activity->location_country;
+					
+					$activity_update->start_latlng			= json_encode( $activity->start_latlng );
+					$activity_update->end_latlng			= json_encode( $activity->end_latlng );
+					
+					$activity_update->temperature			= $temperature;
+					$activity_update->humidity				= $humidity;
+					
 					$activity_update->gear_id				= $activity->gear_id;
 					$activity_update->average_speed			= $activity->average_speed;
 					$activity_update->max_speed				= $activity->max_speed;
