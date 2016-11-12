@@ -62,4 +62,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/faq', function() {
 		return view('strava.faq');
 	});
+	Route::get('/about', function() {
+		return view('strava.about');
+	});
 });

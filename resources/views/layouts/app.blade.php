@@ -65,6 +65,7 @@
 	    							<li><a id='manualImport' href="#"><i class="fa fa-btn"></i>Import from Strava</a></li>
 	    							<li><a href="/faq"><i class="fa fa-btn"></i>FAQ</a></li>
 	    							<li><a id='supportRequest' href="#"><i class="fa fa-btn"></i>Support</a></li>
+	    							<li><a href="/about"><i class="fa fa-btn"></i>About</a></li>
 	    							<li><a href="/auth/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
     							</ul>
 							</li>	

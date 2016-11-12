@@ -4,9 +4,9 @@
 
 <div class="container">
     
-<h1 class="rte-heading text-center">Frequent Questions</h1>
+<h1 class="rte-heading">Frequent Questions</h1>
 <div class="row">
-  <div class="rte col-md-offset-2 col-md-8 col-sm-12 col-sm-offset-0">
+  <div class="rte col-md-10 col-sm-12 col-sm-offset-0">
 	  
     <h4 class="p1">Simple answers to your most common&nbsp;questions<br><br></h4>
     
