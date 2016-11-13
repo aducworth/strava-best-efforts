@@ -350,6 +350,28 @@ class StravaController extends Controller
 	}
 	
 	/**
+	 * Save information regarding yearly running goal.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function saveGoal(Request $request)
+	{
+		
+		if( isset($request->goal) ) {
+			
+			$request->user()->yearly_running_goal = $request->goal;
+			$request->user()->save();
+			
+			return response()->json(['result' => true]);
+			
+		}
+		
+		return response()->json(['result' => false]);
+		
+	}
+	
+	/**
 	 * Show information regarding yearly running goal.
 	 *
 	 * @param  Request  $request
@@ -407,7 +429,7 @@ class StravaController extends Controller
 			
 		}
 		
-		return view('strava.goals',[ 'yearly_running_goal' => $request->user()->yearly_running_goal, 'week_of_year' => $week_of_year, 'miles_to_date' => Activity::formatDistance(  $miles_to_date ), 'time_to_date' => Activity::formatTime( $time_to_date ), 'weekly_mileage' => Activity::formatDistance( $miles_to_date / $week_of_year ), 'weeks_left' => $weeks_left, 'miles_to_go' => $miles_to_go, 'weekly_goal' => $weekly_goal ]);
+		return view('strava.goals',[ 'yearly_running_goal' => $request->user()->yearly_running_goal, 'week_of_year' => $week_of_year, 'miles_to_date' => $miles_to_date, 'time_to_date' => Activity::formatTime( $time_to_date ) ]);
 		
 	}
 	

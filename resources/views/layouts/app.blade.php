@@ -14,8 +14,8 @@
 	<script type="text/javascript" src="{{ asset("assets/bower_components/bootstrap/dist/js/bootstrap.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") }}"></script>
 	<link rel="stylesheet" href="{{ asset("assets/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css") }}" />
-	<script type="text/javascript" src="{{ asset("assets/js/vue.js") }}"></script>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script type="text/javascript" src="{{ asset("assets/bower_components/vue/dist/vue.min.js") }}"></script>
+<!-- 	<script src="https://code.highcharts.com/highcharts.js"></script> -->
     <link href="{{ asset("assets/css/app.css") }}" rel="stylesheet">
     
     <style>

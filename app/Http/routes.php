@@ -58,6 +58,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::get('/strava/splits', 'StravaController@splits');
 	Route::get('/strava/goals', 'StravaController@goals');
 	Route::get('/strava/multi', 'StravaController@multi');
+	Route::get('/strava/save-goal/{goal}', 'StravaController@saveGoal');
 	Route::get('/', 'StravaController@connect');
 	Route::get('/faq', function() {
 		return view('strava.faq');
