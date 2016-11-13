@@ -118,7 +118,7 @@
 						return 52 - this.week;
 					},
 					distanceLeft: function() {
-						var goalUnits = (this.units == 'feet')?convertMeters(this.goal):this.goal
+						var goalUnits = (this.units == 'feet')?convertMeters(this.goal):(this.goal * 1000)
 						var result = goalUnits-this.distance
 						if(result <= 0) {
 							return '-'
@@ -127,7 +127,7 @@
 						}
 					},
 					weeklyGoal: function() {
-						var goalUnits = (this.units == 'feet')?convertMeters(this.goal):this.goal
+						var goalUnits = (this.units == 'feet')?convertMeters(this.goal):(this.goal * 1000)
 						var result = (goalUnits-this.distance)/this.weeksLeft
 						if(result <= 0) {
 							return '-'
