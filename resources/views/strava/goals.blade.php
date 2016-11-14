@@ -149,26 +149,6 @@
 				}
 			})
 			
-			function formatDistance(distance,units) {
-				if(units == 'feet') {
-					return (convertMiles(distance)).toFixed(2) + ' mi'
-				} else {
-					if(distance < 1000) {
-						return distance + ' m'
-					} else {
-						return (distance / 1000).toFixed(2) + ' km'
-					}
-				}
-			}
-			
-			function convertMiles(distance) {
-				return (distance * 0.000621371)
-			}
-			
-			function convertMeters(distance) {
-				return (distance * 1.609344 * 1000)
-			}
-			
 		</script>
 		
 	@endverbatim
