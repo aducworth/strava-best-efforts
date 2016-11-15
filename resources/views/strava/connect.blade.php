@@ -21,7 +21,7 @@
 								<ul>
 									<li>See a list of all of your best efforts</li>
 									<li>Compare splits from runs</li>
-									<li>Set running goals</li>
+									<li>Set annual distance goals</li>
 								</ul>
 								
 								<a href="{{ $url }}" class="btn">
