@@ -20,6 +20,7 @@
 								
 								<ul>
 									<li>See a list of all of your best efforts</li>
+									<li>Import weather conditions for your runs</li>
 									<li>Compare splits from runs</li>
 									<li>Set annual distance goals</li>
 								</ul>
