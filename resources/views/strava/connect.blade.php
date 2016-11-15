@@ -18,7 +18,11 @@
 						<div class="form-group">
 							<div class="col-sm-offset-3 col-sm-6">
 								
-								<p>Connect with Strava to see a list of all of your best efforts running.</p>
+								<ul>
+									<li>See a list of all of your best efforts</li>
+									<li>Compare splits from runs</li>
+									<li>Set running goals</li>
+								</ul>
 								
 								<a href="{{ $url }}" class="btn">
 									<img src="{{ asset("assets/images/ConnectWithStrava.png") }}"/>
