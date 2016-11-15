@@ -80,7 +80,7 @@
                     
                     <!-- Table Body -->
                     <tbody>
-                        <tr v-for='entry in filteredEfforts'>
+                        <tr v-for='entry in filteredEfforts' v-bind:class='{ today: isToday(entry.start_date_local) }'>
                             <td>{{ getIndex(entry) }}.</td>
                             <td class="table-text">
                                 <div>{{ entry.elapsed_time | formatTime }}</div>

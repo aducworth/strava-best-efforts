@@ -90,3 +90,8 @@ function isUndefined(value){
     var undefined = void(0);
     return value === undefined;
 }
+
+function isToday(date) {
+	console.log( 'date: ' + moment(date).format('MM/DD/YYYY') + ' today: ' + moment().format('MM/DD/YYYY'))
+	return (moment().format('MM/DD/YYYY') == moment(date).format('MM/DD/YYYY'))?true:false
+}
