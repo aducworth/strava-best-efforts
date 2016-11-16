@@ -13,16 +13,16 @@
 
 	    <div class="container form-inline">
 				
-			  <div class="form-group" v-bind:class='{ hide: !hasData }'>
+			  <div class="form-group">
 			    {!! Form::select('distance', $distances, (isset($_GET['distance'])?$_GET['distance']:null), ['class' => 'form-control','placeholder' => 'Choose a Distance', 'v-model' => 'distance']) !!}
 			  </div>
 			  <div class="form-group">
-				  <div class='col-sm-6' v-bind:class='{ hide: !hasData }'>
+				  <div class='col-sm-6'>
 					{!! Form::text('from_date', (isset($_GET['from_date'])?$_GET['from_date']:null), ['class' => 'form-control','id' => 'from-date','placeholder' => 'From']) !!}
 				  </div>
 			  </div>
 			  <div class="form-group">
-				  <div class='col-sm-6' v-bind:class='{ hide: !hasData }'>
+				  <div class='col-sm-6'>
 					{!! Form::text('to_date', (isset($_GET['to_date'])?$_GET['to_date']:null), ['class' => 'form-control','id' => 'to-date','placeholder' => 'To']) !!}
 				  </div>
 				  
@@ -126,7 +126,7 @@
 	            </div>
 	        </div>
 			    
-			<div class="alert" role="alert" v-if="hasData && distance == ''">Please choose a distance to view best efforts.</div>
+			<div class="alert" role="alert" v-bind:class='{ hide: !hasDistance }'>Please choose a distance to view best efforts.</div>
 						
 		</div>
 	
@@ -190,6 +190,9 @@
 					},
 					hasData: function() {
 						return (this.efforts == null)?false:true;
+					},
+					hasDistance: function() {
+						return (this.hasData && this.efforts != null)?true:false;
 					}
 				},
 				filters: {
