@@ -52,7 +52,7 @@
 		@verbatim
 		
     	<div class="page-header">
-		  <h1>Best Efforts <small v-html="effortCount"></small></h1>
+		  <h1><span v-html="distance"></span> Best Efforts <small v-html="effortCount"></small></h1>
 		</div>
         <div class="panel panel-default" v-if="distance != ''">
 	        
