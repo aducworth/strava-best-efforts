@@ -167,39 +167,28 @@ class StravaController extends Controller
 		
 		
 		$distances = BestEffort::orderBy('distance','asc')->groupBy('name')->lists('name','name');
+			
+	    return view('strava.running', [
+	        'distances' => $distances
+	    ]);
+	}
+	
+	/**
+	 * Retrieve all of the user's best efforts.
+	 *
+	 * @param  Request  $request
+	 * @return Response
+	 */
+	public function getBestEfforts(Request $request)
+	{
+		
 		
 	    $query = $request->user()->activities()->join('best_efforts as be', 'be.activity_id', '=', 'activities.id')
     ->selectRaw('be.elapsed_time, be.moving_time, be.start_date_local, activities.name, activities.distance, activities.strava_id, be.distance as effort_distance, activities.temperature, activities.humidity, be.name as effort_name')->orderBy('be.elapsed_time', 'asc');
-    	
-    	// make sure a distance is selected
-    	if( $request->distance ) {
-	    	
-	    	if( $request->distance ) {
-		    	$query->where('be.name',$request->distance);
-	    	}
-	    	
-	    	if( $request->from_date ) {
-				$query->where('be.start_date_local','>=',date('Y-m-d',strtotime($request->from_date)));
-			}
-			
-			if( $request->to_date ) {
-				$query->where('be.start_date_local','<=',date('Y-m-d',strtotime('+1 day',strtotime($request->to_date))));
-			}
-	    	
-	    	$efforts = $query->get();
-	    	
-    	} else {
-	    	
-	    	$efforts = [];
-	    	
-    	}
-    	
+    	    	
     	$efforts = $query->get();
 	
-	    return view('strava.running', [
-	        'efforts' => $efforts,
-	        'distances' => $distances
-	    ]);
+	    return response()->json($efforts);
 	}
 	
 	/**

@@ -125,8 +125,11 @@
 					units: '<?=Auth::user()->measurement_preference ?>',
 					sortKey: '',
 					sortOrders: {'elapsed_time':1,'name':1,'temperature':1,'humidity':1,'distance':1,'start_date_local':1},
-					efforts: <?=json_encode( $efforts ) ?>,
+					efforts: {},
 					orderedEfforts: {}
+				},
+				created: function () {
+					this.fetchData()
 				},
 				computed: {
 					filteredEfforts: function() {
@@ -180,6 +183,16 @@
 					}
 				},
 				methods: {
+					fetchData: function() {
+						var xhr = new XMLHttpRequest()
+						var self = this
+						xhr.open('GET', '/strava/get-best-efforts')
+						xhr.onload = function () {
+							self.efforts = JSON.parse(xhr.responseText)
+							console.log(self.efforts[0].name)
+						}
+						xhr.send()
+					},
 					getStravaId: function(strava_id) {
 						return 'https://www.strava.com/activities/' + strava_id;
 					},
