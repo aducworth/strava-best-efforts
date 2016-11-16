@@ -17,7 +17,7 @@
 	<script type="text/javascript" src="{{ asset("assets/bower_components/vue/dist/vue.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/js/app.js") }}"></script>
 <!-- 	<script src="https://code.highcharts.com/highcharts.js"></script> -->
-    <link href="{{ asset("css/app.css") }}?refresh=1" rel="stylesheet">
+    <link href="{{ asset("css/app.css") }}?refresh=2" rel="stylesheet">
     
     <style>
 	    body { padding-top: 70px; }
