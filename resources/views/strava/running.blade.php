@@ -11,21 +11,22 @@
 		</div>
 
 
-	    <div class="container form-inline" v-if="hasData">
+	    <div class="container form-inline">
 				
-			  <div class="form-group">
+			  <div class="form-group" v-bind:class='{ hide: !hasData }'>
 			    {!! Form::select('distance', $distances, (isset($_GET['distance'])?$_GET['distance']:null), ['class' => 'form-control','placeholder' => 'Choose a Distance', 'v-model' => 'distance']) !!}
 			  </div>
 			  <div class="form-group">
-				  <div class='col-sm-6'>
+				  <div class='col-sm-6' v-bind:class='{ hide: !hasData }'>
 					{!! Form::text('from_date', (isset($_GET['from_date'])?$_GET['from_date']:null), ['class' => 'form-control','id' => 'from-date','placeholder' => 'From']) !!}
 				  </div>
 			  </div>
 			  <div class="form-group">
-				  <div class='col-sm-6'>
+				  <div class='col-sm-6' v-bind:class='{ hide: !hasData }'>
 					{!! Form::text('to_date', (isset($_GET['to_date'])?$_GET['to_date']:null), ['class' => 'form-control','id' => 'to-date','placeholder' => 'To']) !!}
 				  </div>
-					<script type="text/javascript">
+				  
+				  <script type="text/javascript">
 			            $(function () {
 				            $('#from-date').datetimepicker({'format':'MM/DD/YYYY'});
 				            
@@ -48,22 +49,19 @@
 					        });
 			            });
 			        </script>
+
 			  </div>
 			
 			<br>
-		
+					
 		</div>
 		
 		@verbatim
 		
-		<div v-if="hasData">
-		
-	    	<div class="page-header">
+	    	<div class="page-header" v-if="hasData">
 			  <h1><span v-html="distance"></span> Best Efforts <small v-html="effortCount"></small></h1>
 			</div>
-	        <div class="panel panel-default" v-if="distance != ''">
-		        
-	           
+	        <div class="panel panel-default" v-if="hasData && distance != ''">
 	            <div class="panel-body table-responsive">
 	                <table class="table table-striped activity-table">
 	
@@ -128,10 +126,8 @@
 	            </div>
 	        </div>
 			    
-			<div class="alert" role="alert" v-if="distance == ''">Please choose a distance to view best efforts.</div>
+			<div class="alert" role="alert" v-if="hasData && distance == ''">Please choose a distance to view best efforts.</div>
 						
-			</div<
-		
 		</div>
 	
 		<script>
@@ -228,7 +224,7 @@
 					}
 				}
 			})
-			
+						
 		</script>
 			
 	@endverbatim
