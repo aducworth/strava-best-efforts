@@ -63,18 +63,30 @@
                     <thead>
                         <th>&nbsp;</th>
                         <th @click="sortBy('elapsed_time')"
-		                    :class="{ active: sortKey == 'elapsed_time' }">Time</th>
+		                    :class="{ active: sortKey == 'elapsed_time' }">Time
+			                	<span class="arrow" :class="sortOrders['elapsed_time'] > 0 ? 'asc' : 'dsc'">
+		                    </th>
                         <th>Pace</th>
                         <th @click="sortBy('name')"
-		                    :class="{ active: sortKey == 'name' }">Activity</th>
+		                    :class="{ active: sortKey == 'name' }">Activity
+			                	<span class="arrow" :class="sortOrders['name'] > 0 ? 'asc' : 'dsc'">    
+		                    </th>
                         <th @click="sortBy('temperature')"
-		                    :class="{ active: sortKey == 'temperature' }">Temperature</th>
+		                    :class="{ active: sortKey == 'temperature' }">Temperature
+			                	<span class="arrow" :class="sortOrders['temperature'] > 0 ? 'asc' : 'dsc'">
+		                    </th>
                         <th @click="sortBy('humidity')"
-		                    :class="{ active: sortKey == 'humidity' }">Humidity</th>
+		                    :class="{ active: sortKey == 'humidity' }">Humidity
+			                	<span class="arrow" :class="sortOrders['humidity'] > 0 ? 'asc' : 'dsc'">    
+		                    </th>
                         <th @click="sortBy('distance')"
-		                    :class="{ active: sortKey == 'distance' }">Total Run</th>
+		                    :class="{ active: sortKey == 'distance' }">Total Run
+			                    <span class="arrow" :class="sortOrders['distance'] > 0 ? 'asc' : 'dsc'">
+		                    </th>
                         <th @click="sortBy('start_date_local')"
-		                    :class="{ active: sortKey == 'start_date_local' }">Date</th>
+		                    :class="{ active: sortKey == 'start_date_local' }">Date
+			                    <span class="arrow" :class="sortOrders['start_date_local'] > 0 ? 'asc' : 'dsc'">
+		                    </th>
                         
                     </thead>
                     
@@ -189,7 +201,6 @@
 						xhr.open('GET', '/strava/get-best-efforts')
 						xhr.onload = function () {
 							self.efforts = JSON.parse(xhr.responseText)
-							console.log(self.efforts[0].name)
 						}
 						xhr.send()
 					},

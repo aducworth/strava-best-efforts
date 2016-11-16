@@ -43,8 +43,33 @@ $web-font-path: "https://fonts.googleapis.com/css?family=News+Cycle:400,700" !de
 
 .today {
 	font-weight: bold;
-	font-size: larger;
 }
+
+th.active .arrow {
+  opacity: 1;
+}
+
+.arrow {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  opacity: 0.66;
+}
+
+.arrow.asc {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #000;
+}
+
+.arrow.dsc {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #000;
+}
+
 // Forms ======================================================================
 
 .has-warning {
