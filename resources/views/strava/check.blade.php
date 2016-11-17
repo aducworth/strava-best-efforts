@@ -6,7 +6,7 @@ $(document).ready(function(){
 	  url: "_check_import"
 	}).done(function(data) {
 	  if( data.result == true ) {
-		  stravaImport();
+		  stravaImport()
 	   }
 	});
 

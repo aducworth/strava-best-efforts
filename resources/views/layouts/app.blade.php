@@ -131,6 +131,7 @@
 			  $('#importSuccess').hide();
 			  $('#importFailure').hide();
 			  $('.progress-bar').html('0%').attr('style','width: 0%;');
+			  var dataRefresh  = false;
 			   
 			  $('#importModal').modal();
 			  var source = new EventSource("/strava/import	");
@@ -142,7 +143,13 @@
 						$('.progress-bar').html(result.refresh + '%').attr('style','width: ' + result.refresh +'%;');  
 					
 						if( result.refresh == 100 ) {
-							$('#importSuccess').show();
+							$('#importSuccess').show()
+							if( !dataRefresh ) {
+								if(!isUndefined($bestEfforts)) {
+									$bestEfforts.fetchData()
+								}
+								dataRefresh = true
+							}
 						}
 					}
 					

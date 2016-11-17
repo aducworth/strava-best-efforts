@@ -207,6 +207,7 @@
 				},
 				methods: {
 					fetchData: function() {
+						console.log('fetching data')
 						var xhr = new XMLHttpRequest()
 						var self = this
 						xhr.open('GET', '/strava/get-best-efforts')
