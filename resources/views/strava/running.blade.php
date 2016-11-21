@@ -126,7 +126,7 @@
 	            </div>
 	        </div>
 			    
-			<div class="alert" role="alert" v-bind:class='{ hide: hasDistance }'>Please choose a distance to view best efforts.</div>
+			<div class="alert" role="alert" v-bind:class='{ hide: hidePrompt }'>Please choose a distance to view best efforts.</div>
 						
 		</div>
 	
@@ -191,11 +191,11 @@
 					hasData: function() {
 						return (this.efforts == null)?false:true;
 					},
-					hasDistance: function() {
+					hidePrompt: function() {
 						console.log( 'distance: ' + ((this.distance != '')?'true':'false') )
 						console.log( 'hasData: ' + ((this.hasData)?'true':'false') )
-						console.log( 'hasDistance: ' + ((this.distance != '' && this.hasData)?'true':'false') )
-						return (this.distance != '' && this.hasData)?true:false;
+						console.log( 'hidePrompt: ' + ((this.distance != '' && this.hasData)?'true':'false') )
+						return (this.distance != '' || !this.hasData)?true:false;
 					}
 				},
 				filters: {
