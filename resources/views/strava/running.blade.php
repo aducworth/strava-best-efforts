@@ -192,6 +192,9 @@
 						return (this.efforts == null)?false:true;
 					},
 					hasDistance: function() {
+						console.log( 'distance: ' + ((this.distance != '')?'true':'false') )
+						console.log( 'hasData: ' + ((this.hasData)?'true':'false') )
+						console.log( 'hasDistance: ' + ((this.distance != '' && this.hasData)?'true':'false') )
 						return (this.distance != '' && this.hasData)?true:false;
 					}
 				},
