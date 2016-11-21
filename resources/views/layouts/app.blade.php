@@ -128,9 +128,9 @@
 		
 		function stravaImport() {
 			
-			  $('#importSuccess').hide();
-			  $('#importFailure').hide();
-			  $('.progress-bar').html('0%').attr('style','width: 0%;');
+			  $('#importResult').html(' ').hide()
+			  $('.progress').show()
+			  $('.progress-bar').html('0%').attr('style','width: 0%;')
 			  var dataRefresh  = false;
 			   
 			  $('#importModal').modal();
@@ -143,7 +143,9 @@
 						$('.progress-bar').html(result.refresh + '%').attr('style','width: ' + result.refresh +'%;');  
 					
 						if( result.refresh == 100 ) {
-							$('#importSuccess').show()
+							$('.progress').hide()
+							$('#importResult').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Finished importing!').show()
+							//$('#importResult').show()
 							if( !dataRefresh ) {
 								if(!isUndefined($bestEfforts)) {
 									$bestEfforts.fetchData()
@@ -155,7 +157,8 @@
 					
 					if( result.message != null ) {
 						
-						$('#importFailure').html('Errors: ' + result.message + '. Please try again in 15 minutes.').show();
+						$('.progress').hide()
+						$('#importResult').html('<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Errors: ' + result.message + '. Please try again in 15 minutes.').show()
 						
 					}
 					
@@ -173,14 +176,13 @@
 	        <h4 class="modal-title">Importing from Strava</h4>
 	      </div>
 	      <div class="modal-body">
-		    <p>Importing all of your activities and best efforts. This will only take a second.</p>
+		    <p>Importing all of your activities and best efforts. This takes longer the first time.</p>
 	        <div class="progress">
 			  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
 			    0%
 			  </div>
 			</div>
-			<div id='importSuccess' class="alert alert-success" style='display: none;' role="alert">Finished importing!</div>
-			<div id='importFailure' class="alert alert-danger" style='display: none;' role="alert"></div>
+			<div id='importResult' class="alert" role="alert" style='display: none;'></div>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
