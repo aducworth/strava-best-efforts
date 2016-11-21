@@ -192,7 +192,7 @@
 						return (this.efforts == null)?false:true;
 					},
 					hasDistance: function() {
-						return (this.distance && this.efforts != null)?true:false;
+						return (this.distance && this.hasData)?true:false;
 					}
 				},
 				filters: {
