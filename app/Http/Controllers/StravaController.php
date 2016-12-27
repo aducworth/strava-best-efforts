@@ -396,6 +396,7 @@ class StravaController extends Controller
 		
 		$week_of_year = date('W');
 		$weeks_left		= ( 52 - $week_of_year );
+		$weeks_left 	= ($weeks_left>0)?$weeks_left:1;
 		
 		$runs = Activity::where('user_id', $request->user()->id)->where('start_date_local','>',$last_year)->where('type','Run')->orderBy('start_date_local', 'asc')->get();
 		
