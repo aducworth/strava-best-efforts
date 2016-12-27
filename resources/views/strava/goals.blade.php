@@ -115,7 +115,7 @@
 						return formatDistance(this.distance/this.week,this.units)
 					},
 					weeksLeft: function() {
-						return 52 - this.week;
+						return ((52 - this.week)>0)?(52 - this.week):1;
 					},
 					distanceLeft: function() {
 						var goalUnits = (this.units == 'feet')?convertMeters(this.goal):(this.goal * 1000)
