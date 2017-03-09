@@ -528,65 +528,69 @@ class StravaController extends Controller
 				
 			}
 			
-			foreach( $activities as $activity ) {
+			if( count($activities) ) {
 				
-				try {
+				foreach( $activities as $activity ) {
 					
-					$activity_update = Auth::user()->activities()->firstOrCreate(['strava_id' => $activity->id]);
-					
-					// check to see if this is new
-					if( !$activity_update->name ) {
-						$imported++;
-					} else {
-						// adding break once we get to activities already imported
-						$finished = true;
-						break;
-					}
-					
-					$temperature = '';
-					$humidity = '';
-					
-					// only get the temp if it's imported on the same day
-					if( date( 'Y-m-d' ) == date( 'Y-m-d', strtotime( $activity->start_date ) ) ) {
+					try {
 						
-						$weather = Openweather::byCoordinates(getenv('OPENWEATHER'),$activity->end_latlng[0],$activity->end_latlng[1]);
+						$activity_update = Auth::user()->activities()->firstOrCreate(['strava_id' => $activity->id]);
 						
-						if( isset( $weather ) && isset( $weather->main->temp ) && isset( $weather->main->humidity ) ) {
-							
-							$temperature = $weather->main->temp;
-							$humidity = $weather->main->humidity;
+						// check to see if this is new
+						if( !$activity_update->name ) {
+							$imported++;
+						} else {
+							// adding break once we get to activities already imported
+							$finished = true;
+							break;
 						}
 						
-					} 
-												 
-					$activity_update->strava_id				= $activity->id;
-					$activity_update->athlete_id 			= $activity->athlete->id;
-					$activity_update->name					= $activity->name;
-					$activity_update->distance				= $activity->distance;
-					$activity_update->moving_time			= $activity->moving_time;
-					$activity_update->elapsed_time			= $activity->elapsed_time;
-					$activity_update->start_date			= $activity->start_date;
-					$activity_update->start_date_local		= $activity->start_date_local;
-					$activity_update->location_city			= $activity->location_city;
-					$activity_update->location_state		= $activity->location_state;
-					$activity_update->location_country		= $activity->location_country;
-					
-					$activity_update->start_latlng			= json_encode( $activity->start_latlng );
-					$activity_update->end_latlng			= json_encode( $activity->end_latlng );
-					
-					$activity_update->temperature			= $temperature;
-					$activity_update->humidity				= $humidity;
-					
-					$activity_update->gear_id				= $activity->gear_id;
-					$activity_update->average_speed			= $activity->average_speed;
-					$activity_update->max_speed				= $activity->max_speed;
-					$activity_update->type					= $activity->type;
-							 
-					$activity_update->save();
-					
-				} catch(Exception $e) {
-					echo 'Caught exception: ',  $e->getMessage(), "<br>";
-				}				
+						$temperature = '';
+						$humidity = '';
+						
+						// only get the temp if it's imported on the same day
+						if( date( 'Y-m-d' ) == date( 'Y-m-d', strtotime( $activity->start_date ) ) ) {
+							
+							$weather = Openweather::byCoordinates(getenv('OPENWEATHER'),$activity->end_latlng[0],$activity->end_latlng[1]);
+							
+							if( isset( $weather ) && isset( $weather->main->temp ) && isset( $weather->main->humidity ) ) {
+								
+								$temperature = $weather->main->temp;
+								$humidity = $weather->main->humidity;
+							}
+							
+						} 
+													 
+						$activity_update->strava_id				= $activity->id;
+						$activity_update->athlete_id 			= $activity->athlete->id;
+						$activity_update->name					= $activity->name;
+						$activity_update->distance				= $activity->distance;
+						$activity_update->moving_time			= $activity->moving_time;
+						$activity_update->elapsed_time			= $activity->elapsed_time;
+						$activity_update->start_date			= $activity->start_date;
+						$activity_update->start_date_local		= $activity->start_date_local;
+						$activity_update->location_city			= $activity->location_city;
+						$activity_update->location_state		= $activity->location_state;
+						$activity_update->location_country		= $activity->location_country;
+						
+						$activity_update->start_latlng			= json_encode( $activity->start_latlng );
+						$activity_update->end_latlng			= json_encode( $activity->end_latlng );
+						
+						$activity_update->temperature			= $temperature;
+						$activity_update->humidity				= $humidity;
+						
+						$activity_update->gear_id				= $activity->gear_id;
+						$activity_update->average_speed			= $activity->average_speed;
+						$activity_update->max_speed				= $activity->max_speed;
+						$activity_update->type					= $activity->type;
+								 
+						$activity_update->save();
+						
+					} catch(Exception $e) {
+						echo 'Caught exception: ',  $e->getMessage(), "<br>";
+					}				
+			    
+			    }
 		    
 		    }
 		    
