@@ -105,8 +105,8 @@ class StravaController extends Controller
 				$user->country = $token->athlete->country;
 				$user->sex = $token->athlete->sex;
 				$user->premium = $token->athlete->premium;
-				$user->date_preference = $token->athlete->date_preference;
-				$user->measurement_preference = $token->athlete->measurement_preference;
+				$user->date_preference = isset($token->athlete->date_preference)?$token->athlete->date_preference:"%m/%d/%Y";
+				$user->measurement_preference = isset($token->athlete->measurement_preference)?$token->athlete->measurement_preference:"feet";
 				$user->email = $token->athlete->email;
 				$user->password = bcrypt('stravapassword');
 				$user->save();
