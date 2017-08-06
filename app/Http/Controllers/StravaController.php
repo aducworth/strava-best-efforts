@@ -737,6 +737,12 @@ class StravaController extends Controller
 					$percentage = number_format( ($runs_imported/count($runs)) * 100 );
 
 					echo ( 'data: ' . json_encode(['refresh' => $percentage]) . "\n\n");
+
+					// we have imported new things, so we need to increase counter
+					if($percentage == 100) {
+						Auth::user()->imports_counter++;
+						Auth::user()->save();
+					}
 					ob_flush();
 		            flush();
 
@@ -746,6 +752,7 @@ class StravaController extends Controller
 			} else {
 				ob_start();
 				echo ( 'data: ' . json_encode(['refresh' => 100]) . "\n\n");
+				// no need to increase counter
 				ob_flush();
 		        flush();
 			}
