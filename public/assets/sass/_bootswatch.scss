@@ -33,6 +33,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=News+Cycle:400,700" !de
   font-size: inherit;
   font-weight: $headings-font-weight;
   text-transform: uppercase;
+  padding: 10px 15px;
 }
 
 // Buttons ====================================================================
@@ -178,10 +179,10 @@ th.active .arrow {
 }
 
 @keyframes sk-bouncedelay {
-  0%, 80%, 100% { 
+  0%, 80%, 100% {
     -webkit-transform: scale(0);
     transform: scale(0);
-  } 40% { 
+  } 40% {
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }

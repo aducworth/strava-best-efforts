@@ -6,9 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>View All Best Efforts From Runs on Strava - Strava Best Efforts</title>
-	
+
 	<meta name="Description" content="View All Best Efforts From Runs on Strava, Analyze Splits, and Set Yearly Running Goals">
-	
+
 	<script type="text/javascript" src="{{ asset("assets/bower_components/jquery/dist/jquery.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/moment/min/moment.min.js") }}"></script>
 	<script type="text/javascript" src="{{ asset("assets/bower_components/bootstrap/dist/js/bootstrap.min.js") }}"></script>
@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="{{ asset("assets/js/app.js") }}"></script>
 <!-- 	<script src="https://code.highcharts.com/highcharts.js"></script> -->
     <link href="{{ asset("css/app.css") }}?refresh=2" rel="stylesheet">
-    
+
     <style>
 	    body { padding-top: 70px; }
 	</style>
@@ -36,7 +36,7 @@
 						<span class="icon-bar"></span>
 					</button>
 
-					<a class="navbar-brand" href="/">Strava Best Efforts</a>
+					<a class="navbar-brand" href="/"><img src="/best-efforts-logo-website.png" alt="Strava Best Efforts" /></a>
 				</div>
 
 				<div id="navbar" class="navbar-collapse collapse">
@@ -69,7 +69,7 @@
 	    							<li><a href="/about"><i class="fa fa-btn"></i>About</a></li>
 	    							<li><a href="/auth/logout"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
     							</ul>
-							</li>	
+							</li>
 						@endif
 					</ul>
 				</div>
@@ -78,24 +78,24 @@
 	<div class="container">
 		@yield('content')
 	</div>
-	
+
 	<script>
-				
+
 		$(document).ready(function(){
-		
+
 			$('#manualImport').click(function(e){
 				e.preventDefault();
 				stravaImport();
 			});
-			
+
 			$('#supportRequest').click(function(e){
 				e.preventDefault();
-				
+
 				$('#supportSuccess').hide();
 				$('#supportFailure').hide();
-				
+
 				//$('#supportModal').modal();
-				
+
 				$.ajax({
 				  url: "/_supportform"
 				}).done(function(data) {
@@ -103,45 +103,45 @@
 				  $('#supportModal').modal();
 				});
 			});
-			
+
 			$('#supportForm').submit(function(e){
 				e.preventDefault();
-				
+
 				var postData = $(this).serialize() + '&url=' + $('#url').val();
-				
+
 				$.ajax({
 				  url: "/_support",
 				  data: postData,
 				  type: "POST"
 				}).done(function(data) {
-					
+
 				  if( data.result ) {
 					  $('#supportSuccess').show();
 				  } else {
 					  $('#supportFailure').text(data.errors).show();
 				  }
 				});
-				
+
 			});
-			
+
 		});
-		
+
 		function stravaImport() {
-			
+
 			  $('#importResult').html(' ').hide()
 			  $('.progress').show()
 			  $('.progress-bar').html('0%').attr('style','width: 0%;')
 			  var dataRefresh  = false;
-			   
+
 			  $('#importModal').modal();
 			  var source = new EventSource("/strava/import	");
 			    source.addEventListener("message", function(e)
 			    {
 				    var result = JSON.parse( e.data );
-	          
+
 					if( result.refresh != null ) {
-						$('.progress-bar').html(result.refresh + '%').attr('style','width: ' + result.refresh +'%;');  
-					
+						$('.progress-bar').html(result.refresh + '%').attr('style','width: ' + result.refresh +'%;');
+
 						if( result.refresh == 100 ) {
 							$('.progress').hide()
 							$('#importResult').html('<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Finished importing!').show()
@@ -154,20 +154,20 @@
 							}
 						}
 					}
-					
+
 					if( result.message != null ) {
-						
+
 						$('.progress').hide()
 						$('#importResult').html('<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Errors: ' + result.message + '. Please try again in 15 minutes.').show()
-						
+
 					}
-					
-					
+
+
 			    }, false);
 		}
-	
+
 	</script>
-	
+
 	<div id='importModal' class="modal fade" tabindex="-1" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -190,7 +190,7 @@
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-	
+
 	<div id='supportModal' class="modal fade" tabindex="-1" role="dialog">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -201,29 +201,29 @@
 	      <div class="modal-body">
 		    <div id='supportSuccess' class="alert alert-success" style='display: none;' role="alert">We have received your request, and we'll get back to you soon!</div>
 			<div id='supportFailure' class="alert alert-danger" style='display: none;' role="alert"></div>
-			
+
 			<input type="hidden" id="url" value="<?=$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'] ?>">
-			
+
 		    <form id="supportForm" action="/_support" method='post'>
-			    
+
 			</form>
 	      </div>
 	    </div><!-- /.modal-content -->
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
-	
+
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	
+
 	  ga('create', 'UA-74182568-1', 'auto');
 	  ga('send', 'pageview');
-	
+
 	</script>
-	
-	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-582b8753312a05ba"></script> 
-	
+
+	<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-582b8753312a05ba"></script>
+
 </body>
 </html>

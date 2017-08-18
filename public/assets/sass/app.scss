@@ -1,3 +1,7 @@
 @import "_variables";
 @import "_bootswatch";
 @import "../bower_components/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.navbar-brand {
+  padding: 10px 15px;
+}
